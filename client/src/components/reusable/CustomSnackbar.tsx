@@ -2,28 +2,29 @@
 import { Snackbar } from "@mui/material";
 import { useContext } from "react";
 import { AppContext } from "../../context/AppContext";
-
+import { useSelector, useDispatch } from "react-redux";
+import { setSnackbar } from "../../store/reducerLogic";
 
 // Component to messages
 function CustomSnackbar() {
-    const {snackbar, handleClose} = useContext(AppContext)
-    const {vertical, horizontal, open, message} = snackbar;
+  const dispatch = useDispatch();
+  const snackbar = useSelector((state: any) => state.account.snackbar);
+  const { vertical, horizontal, open, message } = snackbar;
 
   return (
     <>
       <Snackbar
-        // anchorOrigin={{ `bottom` }}
         open={open}
         autoHideDuration={3000}
-        onClose={handleClose}
+        onClose={() => dispatch(setSnackbar({ open: false }))}
         message={message}
         key={vertical + horizontal}
         sx={{
-            '& .css-1gz1y6s':{
-                backgroundColor:'#161D2F',
-                color:'#FFFFFF',
-                fontFamily: "'Poppins', sans-serif",
-            }
+          '& .css-1gz1y6s': {
+            backgroundColor: '#161D2F',
+            color: '#FFFFFF',
+            fontFamily: "'Poppins', sans-serif",
+          }
         }}
       />
     </>

@@ -5,6 +5,9 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { AppContext } from '../../context/AppContext';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+// @ts-ignore
+import { login, setSnackbar } from '../../store/reducerLogic';
 
 //Defining the type of props that he can accept
 interface LoginProps {
@@ -17,8 +20,10 @@ interface EventType {
 }
 
 function Login({ setisLogin }: LoginProps) {
-  const { setUser, setIsAuthenticated, setSnackbar } = useContext(AppContext)
+  // const { setUser, setIsAuthenticated, setSnackbar } = useContext(AppContext)
   const navigate = useNavigate()
+  const dispatch = useDispatch();
+
 
   //Defining the state for error handling 
   const [error, setError] = useState({
@@ -57,17 +62,17 @@ function Login({ setisLogin }: LoginProps) {
     axios
       .post("/auth/login", { email, password })
       .then((res) => {
-        setIsAuthenticated(true);
-        setUser(res.data?.content?.data);
+        // setIsAuthenticated(true);
+        // setUser(res.data?.content?.data);
+        dispatch(login(res?.data?.content?.data));
+
         localStorage.setItem("token", res.data?.meta?.access_token);
         setLoading(false);
         navigate("/home");
       })
-      .catch(({response}) => {
+      .catch(({ response }) => {
         setLoading(false);
-        setSnackbar((prev) => {
-          return { ...prev, open: true, message: response?.data?.error };
-        });
+        dispatch(setSnackbar({ open: true, message: response?.data?.error }));
       });
   };
 
@@ -95,17 +100,17 @@ function Login({ setisLogin }: LoginProps) {
           label="Email address"
           variant="filled"
           type='email'
-          sx={{ 
-            marginTop: '30px', 
+          sx={{
+            marginTop: '30px',
             width: '100%',
-            '& .css-e2jmdx':{
-                borderBottom: `${error.emailError && '1px solid #FC4747 !important'}`
+            '& .css-e2jmdx': {
+              borderBottom: `${error.emailError && '1px solid #FC4747 !important'}`
             }
           }}
           value={email}
           onChange={(e: EventType[`InputEvent`]) => handleChange(e, "email")}
         />
-        
+
         {error.emailError && (
           <p className="text-secondary text-[12px] absolute right-0 top-[60px]">Can't be empty</p>
         )}
@@ -114,11 +119,11 @@ function Login({ setisLogin }: LoginProps) {
           label="Password"
           variant="filled"
           type='text'
-          sx={{ 
-            marginTop: '20px', 
+          sx={{
+            marginTop: '20px',
             width: '100%',
-            '& .css-e2jmdx':{
-                borderBottom: `${error.passwordError && '1px solid #FC4747 !important'}`
+            '& .css-e2jmdx': {
+              borderBottom: `${error.passwordError && '1px solid #FC4747 !important'}`
             }
           }}
           value={password}
@@ -127,7 +132,6 @@ function Login({ setisLogin }: LoginProps) {
         {error.passwordError && (
           <p className="text-secondary text-[12px] absolute right-0 top-[140px]">Can't be empty</p>
         )}
-
         <LoadingButton
           loadingPosition="start"
           onClick={handleLogin}

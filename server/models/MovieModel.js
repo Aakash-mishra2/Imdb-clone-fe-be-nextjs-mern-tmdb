@@ -1,8 +1,14 @@
 import mongoose from 'mongoose';
+
 const genreSchema = new mongoose.Schema({
   id: { type: Number, required: true },
   name: { type: String, required: true },
 })
+// Relationships
+// Movie can have multiple actors
+// Actor can act in multiple movies
+// Movie has only one producer
+// Producer can produce multiple movies
 
 const movieSchema = new mongoose.Schema({
   title: { type: String, required: true },

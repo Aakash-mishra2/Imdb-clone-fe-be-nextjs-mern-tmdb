@@ -1,12 +1,12 @@
 //This component is to show trending videos on the home page
+import axios from 'axios';
 import { useEffect, useRef, useState } from 'react'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import axios from 'axios';
-import TrendingVideoCard from './TrendingVideoCard';
 import '../reusable/reusable.css'
 import SkeletonLoader from '../reusable/SkeletonLoader';
-import {TrendingVideoType} from '../../types/types'
+import { TrendingVideoType } from '../../types/types'
+import VideoCard from '../reusable/VideoCard';
 
 function TrendingBox() {
 
@@ -70,7 +70,7 @@ function TrendingBox() {
                     {trendings?.map((video) => {
                         return (
                             <div >
-                                <TrendingVideoCard
+                                <VideoCard
                                     imageUrl={video?.poster_path || ""}
                                     title={
                                         video?.media_type === 'movie'
@@ -85,6 +85,7 @@ function TrendingBox() {
                                             ? video?.release_date
                                             : video?.first_air_date
                                     }
+                                    isTrendingMovie={true}
                                 />
                             </div>
                         )

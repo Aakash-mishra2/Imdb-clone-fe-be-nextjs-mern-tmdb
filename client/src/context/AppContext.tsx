@@ -1,5 +1,5 @@
 import { ReactNode, useState, useLayoutEffect, createContext, Dispatch, SetStateAction } from 'react';
-import {userType, snackbarType, bookmarkVideoType} from '../types/types'
+import { userType, snackbarType, bookmarkVideoType } from '../types/types'
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -14,23 +14,23 @@ interface AppContextType {
   isAuthenticated: boolean;
   setIsAuthenticated: Dispatch<SetStateAction<boolean>>;
   user: userType | undefined;
-  setUser: Dispatch<SetStateAction<userType | undefined>>; 
+  setUser: Dispatch<SetStateAction<userType | undefined>>;
   snackbar: snackbarType;
-  setSnackbar: Dispatch<SetStateAction<snackbarType>>; 
+  setSnackbar: Dispatch<SetStateAction<snackbarType>>;
 
   handleClose: any;
   createBookmark: any;
   removeBookmark: any;
   fetchBookmark: any;
 
-  movies: bookmarkVideoType[]; 
-  setMovies: Dispatch<SetStateAction<bookmarkVideoType[]>>; 
-  tvSeries: bookmarkVideoType[]; 
-  setTvSeries: Dispatch<SetStateAction<bookmarkVideoType[]>>; 
+  movies: bookmarkVideoType[];
+  setMovies: Dispatch<SetStateAction<bookmarkVideoType[]>>;
+  tvSeries: bookmarkVideoType[];
+  setTvSeries: Dispatch<SetStateAction<bookmarkVideoType[]>>;
   loading: boolean;
-  setLoading: Dispatch<SetStateAction<boolean>>; 
-  pageNo: number; 
-  setPageNo: Dispatch<SetStateAction<number>>; 
+  setLoading: Dispatch<SetStateAction<boolean>>;
+  pageNo: number;
+  setPageNo: Dispatch<SetStateAction<number>>;
 
 }
 
@@ -52,8 +52,8 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [pageNo, setPageNo] = useState<number>(1)
 
   //========States for bookmark page
-  const [movies, setMovies] =  useState<bookmarkVideoType[]>([]);
-  const [tvSeries, setTvSeries] =  useState<bookmarkVideoType[]>([]);
+  const [movies, setMovies] = useState<bookmarkVideoType[]>([]);
+  const [tvSeries, setTvSeries] = useState<bookmarkVideoType[]>([]);
   const [loading, setLoading] = useState<boolean>(true)
   //========================================
 
@@ -72,7 +72,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   };
 
   //Function to fetch user profile on each page refreash
-  const fetchProfile = async()=>{
+  const fetchProfile = async () => {
     axios
       .get("/auth/me")
       .then((res) => {
@@ -88,72 +88,70 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   }
 
   //Function to fetch all bookmarks including tv series and movies for a particular user
-  const fetchBookmark = async(search="")=>{
-    const token = localStorage.getItem('token')
-
+  const fetchBookmark = async (search = "") => {
+    const token = localStorage.getItem('token');
     await axios.get(
       `/bookmark/get?search=${search}`,
       {
-        headers:{
+        headers: {
           Authorization: `Bearer ${token}`
         }
       }
     )
-    .then((response) => {
-      setMovies(response.data?.data?.movie)
-      setTvSeries(response.data?.data?.tv)
-      setLoading(false)
-    })
-    .catch((_err)=>{
-      setLoading(false)
-      setSnackbar((prev) => {
-        return { ...prev, open: true, message: "Error occurred" };
-      });
-    })
+      .then((response) => {
+        setMovies(response.data?.data?.movie)
+        setTvSeries(response.data?.data?.tv)
+        setLoading(false)
+      })
+      .catch((_err) => {
+        setLoading(false)
+        setSnackbar((prev) => {
+          return { ...prev, open: true, message: "Error occurred" };
+        });
+      })
   }
 
   //Function to create bookmark after clicking on bookmark icon for a particular user
-  const createBookmark = async(videoInfo: any, bookmark_type: string)=>{
-    const token = localStorage.getItem('token')
-
-    await axios.post('/bookmark/create', 
-    {videoInfo, bookmark_type},
-    {
-      headers:{
-        Authorization: `Bearer ${token}`
-      }
-    })
-    .then(()=>{
-      setSnackbar((prev) => {
-        return { ...prev, open: true, message: "Bookmarked successfully" };
-      });
-    })
-    .catch((_err)=>{
-      setSnackbar((prev) => {
-        return { ...prev, open: true, message: "Error occurred" };
-      });
-    })
+  const createBookmark = async (videoInfo: any, bookmark_type: string) => {
+    const token = localStorage.getItem('token');
+    await axios.post('/bookmark/create',
+      { videoInfo, bookmark_type },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      .then(() => {
+        setSnackbar((prev) => {
+          return { ...prev, open: true, message: "Bookmarked successfully" };
+        });
+      })
+      .catch((_err) => {
+        setSnackbar((prev) => {
+          return { ...prev, open: true, message: "Error occurred" };
+        });
+      })
   }
 
   //Function to remove from the bookmark of a particular user
-  const removeBookmark = async(bookmarkId: any)=>{
+  const removeBookmark = async (bookmarkId: any) => {
 
     await axios.delete(`/bookmark/delete?bookmarkId=${bookmarkId}`)
-    .then(()=>{
-      setSnackbar((prev) => {
-        return { ...prev, open: true, message: "Bookmark deleted successfully" };
-      });
-    })
-    .catch((_err)=>{
-      setSnackbar((prev) => {
-        return { ...prev, open: true, message: "Error occurred" };
-      });
-    })
+      .then(() => {
+        setSnackbar((prev) => {
+          return { ...prev, open: true, message: "Bookmark deleted successfully" };
+        });
+      })
+      .catch((_err) => {
+        setSnackbar((prev) => {
+          return { ...prev, open: true, message: "Error occurred" };
+        });
+      })
   }
 
-  useLayoutEffect(()=>{
+  useLayoutEffect(() => {
     fetchProfile()
-  },[])
+  }, [])
 
   return (
     <AppContext.Provider

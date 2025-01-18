@@ -2,8 +2,8 @@ import UserModel from "../models/UserModel.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import validator from "validator";
-const jwt_secret = process.env.JWT_SECRET;
 import genResponseFromat from "../middleware/resFromat.js";
+import { passwordValidation } from "../config/validators.js";
 
 //API to register user
 export const register = async (req, res) => {
@@ -17,8 +17,6 @@ export const register = async (req, res) => {
       return res.status(400).json({ error: "Please give a valid email" });
     }
 
-    //checking if a user with same email address is already there
-    // we can also restrict duplicate entry by adding a compund index in mongodb
     const existingUser = await UserModel.findOne({ email });
     if (existingUser) {
       return res
@@ -26,10 +24,8 @@ export const register = async (req, res) => {
         .json({ error: "User with this email already exists" });
     }
 
-    // checking if a password is strong or not (altough it is a frontend task)
-    //criteria pasword sould be 6 char long contains one lowercase, uppercase, number and special char
-    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z\d]).*$/;
-    if (password.length >= 6 && regex.test(password)) {
+
+    if (passwordValidation(password)) {
       // hashing password
       const salt = await bcrypt.genSalt(10);
       const secPassword = await bcrypt.hash(password, salt);
@@ -39,8 +35,6 @@ export const register = async (req, res) => {
       await user.save();
 
       const id = user?._id;
-      //creating jwt token
-
       jwt.sign(
         { id, email },
         process.env.JWT_SECRET,
@@ -76,10 +70,6 @@ export const register = async (req, res) => {
   }
 };
 
-// API to login the user
-//username: aakash123@gmail.com
-//password: Shadow123@
-
 export const login = async (req, res) => {
   const { email, password } = req.body;
   try {
@@ -91,7 +81,6 @@ export const login = async (req, res) => {
     }
     const user = await UserModel.findOne({ email });
     if (user) {
-      //Comapring given password by user password by dcrypting it
       const passwordCompare = await bcrypt.compare(password, user.password);
       if (passwordCompare) {
         //Creating jwt token with 1 day as expiry
@@ -139,7 +128,7 @@ export const login = async (req, res) => {
 // get single user
 export const getProfile = async (req, res) => {
   try {
-    // getting the user from req object embedded by middleware after verification of token
+    //user embedded by middleware after token verification
     const user = req.user;
     const response = {
       status: true,

@@ -5,6 +5,9 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import axios from 'axios';
 import { AppContext } from '../../context/AppContext';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+// @ts-ignore
+import { login, setSnackbar } from '../../store/reducerLogic.js';
 
 //Defining the type of props that he can accept
 interface RegisterProps {
@@ -18,10 +21,10 @@ interface EventType {
 
 function Register({ setisLogin }: RegisterProps) {
 
-  const { setUser, setIsAuthenticated, setSnackbar } = useContext(AppContext)
-  const navigate = useNavigate()
-
-  //Defining the state for error handling 
+    //const { setUser, setIsAuthenticated, setSnackbar } = useContext(AppContext)
+    const navigate = useNavigate()
+    const dispatch = useDispatch();
+    //Defining the state for error handling 
     const [error, setError] = useState({
         emailError: false,
         passwordError: false,
@@ -64,20 +67,18 @@ function Register({ setisLogin }: RegisterProps) {
 
         setLoading(true);
         axios
-          .post("/auth/signup", { email, password })
-          .then((res) => {
-            setIsAuthenticated(true);
-            setUser(res.data?.content?.data);
-            localStorage.setItem("token", res.data?.meta?.access_token);
-            setLoading(false);
-            navigate("/fav-genres");
-          })
-          .catch(({response}) => {
-            setLoading(false);
-            setSnackbar((prev) => {
-              return { ...prev, open: true, message: response?.data?.error };
+            .post("/auth/signup", { email, password })
+            .then((res) => {
+                dispatch(login(res?.data?.content?.data));
+
+                localStorage.setItem("token", res.data?.meta?.access_token);
+                setLoading(false);
+                navigate("/fav-genres");
+            })
+            .catch(({ response }) => {
+                setLoading(false);
+                dispatch(setSnackbar({ open: true, message: response?.data?.error }));
             });
-          });
     };
 
     // Single function to handles input change of all input

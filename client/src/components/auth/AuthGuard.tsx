@@ -3,6 +3,7 @@
 import { useEffect, ReactNode, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AppContext } from '../../context/AppContext';
+import { useSelector } from 'react-redux';
 
 //Defing the type of children is will accept
 interface AppProviderProps {
@@ -10,8 +11,8 @@ interface AppProviderProps {
 }
 
 export const AuthGuard: React.FC<AppProviderProps> = ({ children }) => {
-    
-    const {isAuthenticated} = useContext(AppContext)
+    //const { isAuthenticated } = useContext(AppContext);
+    const isAuthenticated = useSelector((state: any) => state.account.isAuthenticated);
     const navigate = useNavigate();
 
     //If not authenticated then send him to the login page else serve the requested route

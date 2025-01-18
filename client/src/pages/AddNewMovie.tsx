@@ -31,7 +31,7 @@ function AddNewMovie() {
   const [error, setError] = useState({
     titleError: false,
     summaryError: false,
-  })
+  });
 
   const [snackbar, setSnackbar] = useState({
     open: false,

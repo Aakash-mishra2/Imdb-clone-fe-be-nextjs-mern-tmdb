@@ -6,6 +6,8 @@ import { VideoDetailsType } from '../../types/types';
 import VideoDetailsLoader from './VideoDetailsLoader';
 import linkIcon from '../../assets/link.png'
 import ImdbIcon from '../../assets/imdb.png'
+import { setSnackbar } from '../../store/reducerLogic';
+import { useDispatch } from 'react-redux';
 
 //Defing the type of query params. I am adding videoId and type in the url on clicking on a particuler video to show its detail
 interface queryParamsType {
@@ -16,9 +18,10 @@ interface queryParamsType {
 }
 
 function VideoDetailsPage() {
-  const { setSnackbar } = useContext(AppContext)
+  //  const { setSnackbar } = useContext(AppContext)
 
   const { search } = useLocation();
+  const dispatch = useDispatch();
 
   //Defing the state for the Video
   const [videoInfo, setVideoInfo] = useState<VideoDetailsType>()
@@ -48,9 +51,7 @@ function VideoDetailsPage() {
           setLoading(false)
         })
         .catch((_err) => {
-          setSnackbar((prev) => {
-            return { ...prev, open: true, message: "Error occurred" };
-          });
+          dispatch(setSnackbar({ open: true, message: "Error occurred" }))
           setLoading(false)
         })
     }
