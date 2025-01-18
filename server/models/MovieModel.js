@@ -1,17 +1,15 @@
 import mongoose from 'mongoose';
-
 const genreSchema = new mongoose.Schema({
   id: { type: Number, required: true },
   name: { type: String, required: true },
 })
-
 
 const movieSchema = new mongoose.Schema({
   title: { type: String, required: true },
   original_title: { type: String, required: false },
   overview: { type: String, required: false },
   casts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Actor' }],
-  producers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Producer' }],
+  producer: { type: mongoose.Schema.Types.ObjectId, ref: 'Producer' },
   poster_path: { type: String, required: false },
   release_date: { type: Date, required: false },
   userId: { type: mongoose.Types.ObjectId, ref: 'User', required: true },

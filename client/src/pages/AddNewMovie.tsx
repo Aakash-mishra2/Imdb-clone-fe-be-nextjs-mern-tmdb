@@ -5,7 +5,6 @@ import Loader from '../components/customLoader/Loader';
 import Autocomplete from '@mui/material/Autocomplete';
 import { TextField, Container, Chip } from '@mui/material';
 import { debounce } from 'lodash';
-import { DatePicker } from '@heroui/date-picker';
 import { useNavigate } from 'react-router-dom';
 
 //Definf the type of genres object
@@ -26,8 +25,7 @@ function AddNewMovie() {
   const [summary, setSummary] = useState<string>("");
   const [results, setResults] = useState<actor[]>([]);
   const [selectedActors, setSelectedActors] = useState<any[]>([]);
-  const [selectedProducers, setSelectedProducers] = useState<any[]>([]);
-  const [releaseDate, setReleaseDate] = useState<any>(null);
+  const [selectedProducer, setSelectedProducer] = useState<any>({ name: "", id: "" });
   const navigate = useNavigate();
 
   const [error, setError] = useState({
@@ -42,13 +40,6 @@ function AddNewMovie() {
     message: ""
   });
 
-
-  const handleDateChange = (newDate: Date | null) => {
-    setReleaseDate(newDate); // Update the release date state
-    console.log('release date', releaseDate);
-  };
-
-  useEffect(() => { console.log('date', releaseDate); }, []);
 
   const fetchSearchResults = async (query: string) => {
     if (!query) return;
@@ -77,7 +68,7 @@ function AddNewMovie() {
 
   useEffect(() => {
     return () => { debouncedSearch.cancel(); }
-  }, [])
+  }, [selectedProducer])
 
   // Single function to handles input change of both input
   const handleChange = (e: EventType[`InputEvent`], field: string) => {
@@ -101,8 +92,7 @@ function AddNewMovie() {
       original_title: title,
       summary: summary,
       selectedActors: selectedActors,
-      selectedProducers: selectedProducers,
-      releaseDate: releaseDate,
+      selectedProducer: selectedProducer,
     };
     setLoading(true);
     const response: any = await axios.post('/movie/add', formObject, {
@@ -123,7 +113,6 @@ function AddNewMovie() {
         });
       });
 
-    console.log('response', response.data.added);
   }
 
   return (
@@ -251,35 +240,18 @@ function AddNewMovie() {
               }
             />
             <Autocomplete
-              multiple
-              id="tags-outlined"
+              freeSolo
               options={results}
               getOptionLabel={(option) => option.name}
-              value={selectedProducers}
-              onChange={(event: any, newValue: any[]) => {
+              value={selectedProducer}
+              onChange={(event: any, newValue: any) => {
                 event.preventDefault();
-                setSelectedProducers(newValue);
+                setSelectedProducer(newValue);
               }
               }
               disableCloseOnSelect
               filterSelectedOptions
               onInputChange={(_, newInputValue: string) => handleSearchChange({ target: { value: newInputValue } })}
-              sx={{
-                '& MuiFormLabel-root': {
-                  color: 'white',
-                },
-                '& .css-e2jmdx': {
-                  color: 'white'
-                },
-                '& .MuiFormControl-root': {
-                  backgroundColor: '#161D2F',
-                  marginTop: '4px'
-                },
-                fontSize: '14px',
-                '& .MuiFormLabel-root ': {
-                  marginBottom: '8px'
-                }
-              }}
               renderInput={(params) => (
                 <TextField
                   {...params}
@@ -308,28 +280,6 @@ function AddNewMovie() {
                   }}
                 />
               )}
-              renderTags={(value, getTagProps) =>
-                value.map((option: any, index: number) => (
-                  <Chip
-                    label={option.name}
-                    {...getTagProps({ index })}
-                    sx={{
-                      '& .MuiChip-label': {
-                        color: 'white', // White color for label
-                      },
-                      '& .MuiSvgIcon-root': {
-                        color: 'white',
-                      },
-                      '& .MuiInputBase-input': {
-                        color: 'white', // White color for input text
-                      },
-                      '& .MuiButtonBase-root': {
-                        color: 'white'
-                      }
-                    }}
-                  />
-                ))
-              }
             />
 
             <LoadingButton

@@ -1,7 +1,10 @@
-import axios from 'axios'
-const apiKey = process.env.TMDB_API_KEY;
-import Movie from "../models/MovieModel.js";
 import dayjs from 'dayjs';
+import axios from 'axios'
+import Movie from "../models/MovieModel.js";
+import Actor from "../models/actorModel.js";
+import Producer from "../models/producerModel.js";
+
+const apiKey = process.env.TMDB_API_KEY;
 
 //Getting all movies with pagination
 export const getAllMovies = async (req, res) => {
@@ -15,9 +18,7 @@ export const getAllMovies = async (req, res) => {
             );
             result = response.data;
 
-            const existingMovies = await Movie.find({ userId: user._id }).populate('actors');
-            console.log('//', [...existingMovies, ...response.data.results]);
-
+            const existingMovies = await Movie.find({ userId: user._id });
             result.results = [...existingMovies, ...response.data.results];
 
             res.status(200).json(result);
@@ -27,13 +28,9 @@ export const getAllMovies = async (req, res) => {
             const response = await axios.get(
                 `https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(search)}&include_adult=true&language=en-US&page=${pageNo}&api_key=${apiKey}`
             );
-
             result = response.data;
-
             res.status(200).json(result);
         }
-        //res.status(200).json(result);
-
     } catch (error) {
         res
             .status(500)
@@ -54,7 +51,7 @@ export const getSingleMovie = async (req, res) => {
         let releventCasts = newResponse?.casts?.cast;
         const { casts, ...resWithoutCredits } = newResponse;
 
-        let finalResponse = { ...resWithoutCredits, casts: releventCasts }
+        let finalResponse = { ...resWithoutCredits, casts: releventCasts };
 
         return res.status(200).json(finalResponse);
     } catch (error) {
@@ -68,12 +65,13 @@ export const getMovieDetails = async (req, res) => {
     const { movieId } = req.params;
 
     try {
-        const response = await Movie.findById(movieId);
+        const response = await Movie.findById(movieId)
+            .populate('casts')
+            .populate('producer');
 
-        console.log('response', response);
         res.status(200).json(response);
     }
-    catch (err) {
+    catch (error) {
         res
             .status(500)
             .json({ status: true, error: error, message: "Internal server error" });
@@ -81,18 +79,40 @@ export const getMovieDetails = async (req, res) => {
 }
 
 export const addNewMovie = async (req, res) => {
-    const { original_title, selectedActors, selectedProducers, summary } = req.body;
+    const { original_title, selectedActors, selectedProducer, summary } = req.body;
     const user = req.user;
     const relDate = dayjs(new Date()).format('YYYY-MM-DD');
 
+    let actorIds = [];
+    let producerId = "";
+
     try {
-        //refactring casts array because unessessary casts are coming
+        //Process actors
+        for (const actor of selectedActors) {
+            let existingActor = await Actor.findOne({ imdbId: actor.imdbId });
+            if (existingActor) actorIds.push(existingActor._id);
+            else {
+                let newActor = new Actor({ ...actor, movies: [] });
+                newActor.save();
+                actorIds.push(newActor._id);
+            }
+        }
+
+        //Process producer
+        let existingProducer = await Producer.findOne({ imdbId: selectedProducer.imdbId });
+
+        if (existingProducer) producerId = existingProducer._id;
+        else {
+            let newProducer = new Producer({ ...selectedProducer, movies: [] });
+            await newProducer.save();
+            producerId = newProducer._id;
+        }
         const newMovie = {
             title: original_title,
             original_title,
             poster_path: process.env.DEFAULT_MOVIE_POSTER,
-            casts: selectedActors,
-            producers: selectedProducers,
+            casts: actorIds,
+            producer: producerId,
             overview: summary,
             userId: user._id,
             status: "released",
@@ -120,7 +140,19 @@ export const addNewMovie = async (req, res) => {
         const movie = new Movie(newMovie);
         await movie.save();
 
-        res.status(200).json({ added: movie });
+
+        // Update the movies array for actors after movie creation
+        for (const actorId of actorIds) {
+            await Actor.findByIdAndUpdate(
+                actorId,
+                { $addToSet: { movies: movie._id } }); // Add movie reference if not already present
+        }
+        await Producer.findByIdAndUpdate(
+            producerId,
+            { $addToSet: { movies: movie._id } }
+        );
+
+        res.status(200).json({ msg: "New movie added" });
     }
     catch (error) {
         res

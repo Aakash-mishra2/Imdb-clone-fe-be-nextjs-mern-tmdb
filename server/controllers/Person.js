@@ -8,10 +8,9 @@ export const getPersonBySearch = async (req, res) => {
         const response = await axios.get(
             `https://api.themoviedb.org/3/search/person?query=${search}&language=en-US&api_key=${apiKey}`
         );
-        console.log('response', response.data.results);
-
         const reducedData = response.data.results.map(actor => ({
             id: actor.id,
+            imdbId: actor.id,
             name: actor.name,
             profile_path: actor.profile_path,
         }));
