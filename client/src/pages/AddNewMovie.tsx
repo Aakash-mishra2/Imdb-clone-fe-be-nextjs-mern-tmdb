@@ -6,6 +6,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import { TextField, Container, Chip } from '@mui/material';
 import { debounce } from 'lodash';
 import { DatePicker } from '@heroui/date-picker';
+import { useNavigate } from 'react-router-dom';
 
 //Definf the type of genres object
 
@@ -27,11 +28,20 @@ function AddNewMovie() {
   const [selectedActors, setSelectedActors] = useState<any[]>([]);
   const [selectedProducers, setSelectedProducers] = useState<any[]>([]);
   const [releaseDate, setReleaseDate] = useState<any>(null);
+  const navigate = useNavigate();
 
   const [error, setError] = useState({
     titleError: false,
     summaryError: false,
   })
+
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    vertical: "bottom",
+    horizontal: "right",
+    message: ""
+  });
+
 
   const handleDateChange = (newDate: Date | null) => {
     setReleaseDate(newDate); // Update the release date state
@@ -57,7 +67,7 @@ function AddNewMovie() {
 
   const debouncedSearch = debounce((query: string) => {
     fetchSearchResults(query);
-  }, 500);
+  }, 300);
 
   // Handle search input change
   const handleSearchChange = useCallback((obj: any) => {
@@ -83,7 +93,9 @@ function AddNewMovie() {
     else if (field === "summary") setSummary(text);
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    const token = localStorage.getItem('token')
+
     const formObject = {
       title: title,
       original_title: title,
@@ -91,16 +103,32 @@ function AddNewMovie() {
       selectedActors: selectedActors,
       selectedProducers: selectedProducers,
       releaseDate: releaseDate,
-    }
-    console.log('all inputs', formObject);
+    };
+    setLoading(true);
+    const response: any = await axios.post('/movie/add', formObject, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+      .then(() => {
+        setLoading(false);
+        setSnackbar((prev) => {
+          return { ...prev, open: true, message: "Added Movie Succesfully." };
+        });
+        navigate("/home/movies");
+      })
+      .catch((_err) => {
+        setSnackbar((prev) => {
+          return { ...prev, open: true, message: "Added Movie Succesfully." };
+        });
+      });
 
-    
+    console.log('response', response.data.added);
   }
 
   return (
 
     <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: '100vh', pt: 5, pb: 5 }}>
-
       <main className="mt-6  p-4 bg-secondary rounded-xl xs:w-[100%] sm:w-[60%]">
         <h1 className='text-2xl text-center'>
           New Movie

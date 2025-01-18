@@ -16,7 +16,6 @@
     "@mui/icons-material": "^5.15.7",
     "@mui/lab": "^5.0.0-alpha.163",
     "@mui/material": "^5.15.7",
-    "@mui/x-date-pickers": "^7.23.6",
     "axios": "^1.6.7",
     "dayjs": "^1.11.13",
     "framer-motion": "^11.18.0",

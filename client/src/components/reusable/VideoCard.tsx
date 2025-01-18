@@ -19,13 +19,13 @@ interface VideoCardProps {
     releaseDate?: string;
     bookmark?: boolean;
     bookmarkId?: any;
+    isNewMovie?: boolean;
 }
 
 
-function VideoCard({ title, imageUrl, adult, id, videoType, releaseDate, bookmark = false, bookmarkId }: VideoCardProps) {
+function VideoCard({ title, imageUrl, adult, id, videoType, releaseDate, bookmark = false, bookmarkId, isNewMovie = false }: VideoCardProps) {
 
     const { createBookmark, removeBookmark, fetchBookmark, setSnackbar } = useContext(AppContext)
-
     //state to check whether the current trending video has been bookmarked or not
     const [isBookmarked, setIsBookmarked] = useState(bookmark)
     const [isBookmarking, setIsBookmarking] = useState<boolean>(false) // state to show laoder when adding or removing bookmark
@@ -43,8 +43,6 @@ function VideoCard({ title, imageUrl, adult, id, videoType, releaseDate, bookmar
         setIsBookmarked(true)
     }
 
-    //Function to remove bookmark. Remember we need to go to bookmark page to remove the bookmark
-    //because the bookmark can only be removed with its mongodb _id
     const handleRemoveBookmark = async () => {
         if (!bookmarkId) {
             setSnackbar((prev) => {
@@ -71,7 +69,7 @@ function VideoCard({ title, imageUrl, adult, id, videoType, releaseDate, bookmar
                 className='rounded-sm h-[170px] w-[250px] hover:opacity-70 cursor-pointer object-cover'
                 role='button'
                 onClick={() =>
-                    navigate(`/home/video/details?type=${videoType}&id=${id}`)
+                    navigate(`/home/video/details?type=${videoType}&id=${id}${isNewMovie && '&isNew=true'}`)
                 }
             />
 
@@ -86,35 +84,34 @@ function VideoCard({ title, imageUrl, adult, id, videoType, releaseDate, bookmar
                         }
                     </>
                     :
-                    <CircularProgress sx={{height:'25px', width:'25px', color:'#FFFFFF', marginTop:'2px'}}/>
+                    <CircularProgress sx={{ height: '25px', width: '25px', color: '#FFFFFF', marginTop: '2px' }} />
                 }
             </div>
 
             <div
                 className='gap-2 absolute top-[70px] left-[90px] bg-white bg-opacity-30 p-2 rounded-full text-xl hidden cursor-pointer play-container'
                 role='button'
-                onClick={() =>
-                    navigate(`/home/video/details?type=${videoType}&id=${id}`)
-                }
+                onClick={() => navigate(`/home/video/details?type=${videoType}&id=${id}${isNewMovie ? '&isNew=true' : ''}`)}
             >
                 <PlayCircleIcon sx={{ fontSize: '30px' }} />
                 <p>Play</p>
             </div>
-
-
-            <div className='flex gap-7 text-primary text-sm mt-2'>
-                <p>{releaseDate?.split('-')[0]}</p>
-                <ul className='flex list-disc gap-6'>
-                    <li>{videoType}</li>
-                    <li>{adult ? '18+' : 'PG'}</li>
-                </ul>
+            <div className='flex flex-row justify-between'>
+                <div className='flex flex-col'>
+                    <div className='flex gap-7 text-primary text-sm mt-2'>
+                        <p>{releaseDate?.split('-')[0]}</p>
+                        <ul className='flex list-disc gap-6'>
+                            <li>{videoType}</li>
+                            <li>{adult ? '18+' : 'PG'}</li>
+                        </ul>
+                    </div>
+                    <h1 className=''>
+                        {
+                            title?.slice(0, 20)
+                        }
+                    </h1>
+                </div>
             </div>
-            <h1 className=''>
-                {
-                    title?.slice(0, 20)
-                }
-            </h1>
-
         </div>
     )
 }

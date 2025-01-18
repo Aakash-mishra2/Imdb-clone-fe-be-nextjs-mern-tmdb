@@ -72,7 +72,7 @@ export const register = async (req, res) => {
   } catch (err) {
     res
       .status(500)
-      .json({ status:false, error: err, message: "Registration failed" });
+      .json({ status: false, error: err, message: "Registration failed" });
   }
 };
 

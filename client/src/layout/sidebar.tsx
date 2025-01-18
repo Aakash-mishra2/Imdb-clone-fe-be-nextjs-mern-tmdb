@@ -6,7 +6,6 @@ import LiveTvIcon from '@mui/icons-material/LiveTv';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import LogoutIcon from '@mui/icons-material/Logout';
-//import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutlineIcon';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 import { Link, useLocation } from 'react-router-dom';
@@ -75,7 +74,7 @@ function sidebar() {
                     </Tooltip>
                 </Link>
                 <Link to='/fav-genres'>
-                    <Tooltip title="Fav Genres" placement='right-start' >
+                    <Tooltip title="Fav Genres" placement='right-start'>
                         <FavoriteIcon
                             sx={{
                                 color: `${pathname === '/fav-genres' ? 'white' : '#5A698F'}`
@@ -87,7 +86,8 @@ function sidebar() {
                     <Tooltip title="Add New Movie" placement='right-start' >
                         <AddCircleIcon
                             sx={{
-                                color: `${pathname === '/fav-genres' ? 'white' : '#5A698F'}`
+                                color: `${pathname === '/fav-genres' ? 'white' : '#FC4747'}`,
+                                fontSize: '30px',
                             }}
                         />
                     </Tooltip>
@@ -104,7 +104,7 @@ function sidebar() {
                     </Avatar>
                 </div>
             </div>
-           
+
         </header>
     )
 }

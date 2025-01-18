@@ -5,7 +5,6 @@ import cors from "cors";
 import morgan from 'morgan';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
-
 import connectDB from "./config/dbConnection.js";
 
 import authRouter from './router/authRouter.js'
@@ -17,9 +16,9 @@ import bookmarkRouter from './router/bookmarkRouter.js'
 
 // setting up express server
 const app = express();
-app.use(express.json({limit: '50mb'}));
+app.use(express.json({ limit: '50mb' }));
 app.use(cookieParser())
-app.use(bodyParser.urlencoded({extended: true}))
+app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json({
   parameterLimit: 100000,
   limit: '50mb'
@@ -30,11 +29,12 @@ app.disable('etag');
 
 //// setting up cors. Only allowed origin can make api request
 const allowedOrigins = ['https://movie-app-client-dsz5.onrender.com', 'http://localhost:8000/*'];
+
 const corsOptions = {
-    credentials: true,
-    origin: allowedOrigins,
-    methods: 'GET, POST, PUT, DELETE',
-    allowedHeaders: 'Content-Type, Authorization, Cookie'
+  credentials: true,
+  origin: allowedOrigins,
+  methods: 'GET, POST, PUT, DELETE',
+  allowedHeaders: 'Content-Type, Authorization, Cookie'
 };
 
 // app.use(cors(corsOptions));

@@ -8,7 +8,7 @@ import { AppContext } from '../context/AppContext';
 import SkeletonLoader from '../components/reusable/SkeletonLoader';
 import PaginationComponent from '../components/reusable/Pagination';
 import NothingToShow from '../components/reusable/NothingToShow';
-import {VideoType} from '../types/types'
+import { VideoType } from '../types/types'
 
 function MoviePage() {
   const { setSnackbar } = useContext(AppContext)
@@ -19,7 +19,7 @@ function MoviePage() {
   //State to show Skeleton loader when data is being fetched from the server
   const [loading, setLoading] = useState<boolean>(true)
 
-  
+
   //===================States for searching and pagination 
   const [searchQuery, setSearchQuery] = useState<string>(""); //state for onChange of input box
   const [pageNo, setPageNo] = useState<number>(1);
@@ -86,8 +86,9 @@ function MoviePage() {
                       imageUrl={movie?.poster_path}
                       title={movie?.original_title}
                       adult={movie?.adult}
-                      id={movie?.id}
+                      id={(movie?._id ? movie?._id : movie?.id)}
                       videoType="movie"
+                      isNewMovie={!!movie?._id}
                       releaseDate={movie?.release_date}
                     />
                   )
