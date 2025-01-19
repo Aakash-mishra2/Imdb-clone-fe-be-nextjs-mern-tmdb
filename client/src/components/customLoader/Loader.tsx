@@ -1,8 +1,6 @@
-//This Component is for showing loader when app is loading
 import MovieCreationIcon from '@mui/icons-material/MovieCreation';
 import './Loader.css'; 
 
-//Coponent to create a custome Loader
 const Loader = () => {
   return (
     <div className="loader-container">

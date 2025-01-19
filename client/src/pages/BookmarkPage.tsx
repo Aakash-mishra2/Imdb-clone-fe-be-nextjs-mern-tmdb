@@ -1,10 +1,10 @@
-//Page to show all bookmarks including tv series and movies
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+
 import SearchIcon from '@mui/icons-material/Search';
 import VideoCard from '../components/reusable/VideoCard';
 import SkeletonLoader from '../components/reusable/SkeletonLoader';
 import NothingToShow from '../components/reusable/NothingToShow';
-import { useSelector, useDispatch } from 'react-redux';
 import { bookmarkVideoType } from '../types/types.js';
 //@ts-ignore
 import { fetchBookmark, setLoading } from '../store/reducerLogic.js';
@@ -16,6 +16,7 @@ function BookmarkPage() {
   const [searchQuery, setSearchQuery] = useState<string>(""); //state for onChange of input box
   const [searchInput, setSearchInput] = useState<string>("");  //state for searching videos
   const loading = useSelector((state: any) => state.bookmark.loading);
+
   useEffect(() => {
     dispatch(setLoading(true));
     dispatch(fetchBookmark(searchInput));

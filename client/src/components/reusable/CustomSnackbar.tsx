@@ -3,7 +3,6 @@ import { Snackbar } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { setSnackbar } from "../../store/reducerLogic";
 
-// Component to messages
 function CustomSnackbar() {
   const dispatch = useDispatch();
   const snackbar = useSelector((state: any) => state.account.snackbar);

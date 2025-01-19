@@ -35,13 +35,6 @@ function AddNewMovie() {
     summaryError: false,
   });
 
-  const [snackbar, setSnackbar] = useState({
-    open: false,
-    vertical: "bottom",
-    horizontal: "right",
-    message: ""
-  });
-
 
   const fetchSearchResults = async (query: string) => {
     if (!query) return;

@@ -1,12 +1,15 @@
 //Page for Authentication
-import { Container } from '@mui/material'
+import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react'
+import { Container } from '@mui/material'
+
 import Register from '../components/auth/Register'
 import Login from '../components/auth/Login'
 import MovieCreationIcon from '@mui/icons-material/MovieCreation';
-import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+
 function AuthPage() {
+
   const isAuthenticated = useSelector((state: any) => state.account.isAuthenticated)
   const [isLogin, setisLogin] = useState<boolean>(true);
   const navigate = useNavigate();

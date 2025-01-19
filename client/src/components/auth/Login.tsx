@@ -21,7 +21,6 @@ interface EventType {
 function Login({ setisLogin }: LoginProps) {
   const navigate = useNavigate()
   const dispatch = useDispatch();
-  //Defining the state for error handling 
   const [error, setError] = useState({
     emailError: false,
     passwordError: false,
@@ -32,7 +31,6 @@ function Login({ setisLogin }: LoginProps) {
   const [password, setPassword] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
-  //Funtion to handle login after all input validation
   const handleLogin = (event: React.FormEvent) => {
     event.preventDefault();
     if (!email && !password) {
@@ -58,8 +56,6 @@ function Login({ setisLogin }: LoginProps) {
     axios
       .post("/auth/login", { email, password })
       .then((res) => {
-        // setIsAuthenticated(true);
-        // setUser(res.data?.content?.data);
         dispatch(login(res?.data?.content?.data));
 
         localStorage.setItem("token", res.data?.meta?.access_token);
@@ -77,7 +73,7 @@ function Login({ setisLogin }: LoginProps) {
   const handleChange = (e: EventType[`InputEvent`], field: string) => {
     const text = e.target.value;
     const newField = field + "Error";
-    // Removing error state if value in particular input is changes
+
     if (text) {
       setError((prev) => {
         return { ...prev, [newField]: false };
@@ -136,6 +132,7 @@ function Login({ setisLogin }: LoginProps) {
           {!loading && "Login to your account"}
         </LoadingButton>
       </form>
+
       <div className='flex items-center justify-center gap-3 mb-[20px]'>
         <p>Don't have an account?</p>
         <div role='button' className='text-secondary' onClick={() => setisLogin(false)}>Sign up</div>

@@ -7,13 +7,9 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 // @ts-ignore
 import { login, setSnackbar } from '../../store/reducerLogic.js';
-
-//Defining the type of props that he can accept
 interface RegisterProps {
     setisLogin: React.Dispatch<React.SetStateAction<boolean>>;
 }
-
-//Defining the type event object of input type text
 interface EventType {
     InputEvent: React.ChangeEvent<HTMLInputElement>;
 }
@@ -21,7 +17,6 @@ interface EventType {
 function Register({ setisLogin }: RegisterProps) {
     const navigate = useNavigate()
     const dispatch = useDispatch();
-    //Defining the state for error handling 
     const [error, setError] = useState({
         emailError: false,
         passwordError: false,
@@ -34,7 +29,6 @@ function Register({ setisLogin }: RegisterProps) {
     const [repeatPass, setRepeatPass] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
 
-    //Funtion to handle registration after all input validation
     const handleRegister = (event: React.FormEvent) => {
         event.preventDefault();
         if (!email && !password) {
@@ -82,7 +76,6 @@ function Register({ setisLogin }: RegisterProps) {
     const handleChange = (e: EventType[`InputEvent`], field: string) => {
         const text = e.target.value;
         const newField = field + "Error";
-        // Removing error state if value in particular input is changes
         if (text) {
             setError((prev) => {
                 return { ...prev, [newField]: false };

@@ -7,7 +7,6 @@ import PaginationComponent from '../reusable/Pagination';
 import NothingToShow from '../reusable/NothingToShow';
 import { VideoType } from '../../types/types'
 
-//Defining the type of props that he can accept
 interface propType {
     searchInput: string;
     searchQuery: string;
@@ -16,8 +15,6 @@ interface propType {
 }
 
 function Recommended({ searchInput, searchQuery, pageNo, setPageNo }: propType) {
-
-    //Defining the state for videos which needs to show in recommended section
     const [allVideos, setAllVideos] = useState<VideoType[]>([])
     const [loading, setLoading] = useState<boolean>(true)
 

@@ -3,12 +3,27 @@
 This is a Full Stack Application  that allows users to search for their preferred movies or TV series and it has the functionality of bookmarking their favorites movie or TV series. 
 
 ## Tech used:
-- **FRONTEND:** **ReactJs**, **Typescript**, **Tailwind**.
+- **FRONTEND:** **ReactJs**, **Typescript**, **Tailwind**, **Redux State Management**.
 - **BACKEND:** **Nodejs**, **ExpressJs**, **MongoDB**, **TMDB API**.
 
-## Features
+## Features and Functionality
 
 - **Login and Signup. Validation for all inputs is also added**
+  **Add New Movie. Multiple Actors/ One Producer/ Title/ Summary**
+    *** Movies DB Relations: ***
+    *** ONE Actor can Act in MANY Movies***
+    *** ONE Producer can produce MANY  Movie ***
+    *** ONE Movie can have MANY Actors and ONE Producer ***
+
+    **Token Based Authentication by JWT**
+
+  **Add or Remove Bookmarks from your favourite movies/tvShows**
+  **Recommended movies based on Favourite User Genres**
+
+- **A beautiful responsive UI using MaterialUI, TailwindCSS and Typescript**
+
+
+
 - **Page to select favourite genres and save.**
 - **Home page:**
     - **1. All trending videos including movie and tv series in card format.**
@@ -29,7 +44,87 @@ This is a Full Stack Application  that allows users to search for their preferre
 - **Genres page:**
     - **1. List of all genres. Previous selected genres comes with auto selected.**
     - **2. User can update their favourite genres.**
-- **A beautiful responsive UI.**
+
+## FRONTEND CLIENT FILETREE
+
+```
+📦src
+ ┣ 📂assets
+ ┣ 📂components
+ ┃ ┣ 📂auth
+ ┃ ┃ ┣ 📜AuthGuard.tsx                 //HOC for authentication and redirect if not
+ ┃ ┃ ┣ 📜Login.tsx
+ ┃ ┃ ┗ 📜Register.tsx
+ ┃ ┣ 📂customLoader
+ ┃ ┣ 📂home
+ ┃ ┃ ┣ 📜Recommended.tsx
+ ┃ ┃ ┗ 📜TrendingBox.tsx
+ ┃ ┗ 📂reusable
+ ┃ ┃ ┣ 📜CustomSnackbar.tsx
+ ┃ ┃ ┣ 📜NothingToShow.tsx
+ ┃ ┃ ┣ 📜Pagination.tsx
+ ┃ ┃ ┣ 📜reusable.css
+ ┃ ┃ ┣ 📜SkeletonLoader.tsx
+ ┃ ┃ ┣ 📜VideoCard.tsx
+ ┃ ┃ ┣ 📜VideoDetailsLoader.tsx
+ ┃ ┃ ┗ 📜VideoDetailsPage.tsx
+ ┣ 📂context
+ ┃ ┗ 📜AppContext.tsx
+ ┣ 📂layout
+ ┃ ┣ 📜index.tsx
+ ┃ ┗ 📜sidebar.tsx          //Side Menubar for screens toggle
+ ┣ 📂pages                  
+ ┃ ┣ 📜AddNewMovie.tsx      
+ ┃ ┣ 📜AuthPage.tsx         //User login & signup toggle
+ ┃ ┣ 📜BookmarkPage.tsx
+ ┃ ┣ 📜FavGenres.tsx
+ ┃ ┣ 📜HomePage.tsx
+ ┃ ┣ 📜MoviePage.tsx        // Listing Newly Added & Existing Movies
+ ┃ ┗ 📜TvSeriesPage.tsx
+ ┣ 📂routes                 //HOC for routing 
+ ┃ ┗ 📜index.tsx
+ ┣ 📂store
+ ┃ ┣ 📜index.js             //redux store 
+ ┃ ┗ 📜reducerLogic.tsx     //redux slices for fetchProfile, CRUD Bookmarks, SetAppLoading state and more
+ ┣ 📂types
+ ┃ ┗ 📜types.ts
+ ┣ 📜App.css
+ ┣ 📜App.tsx                //App root component
+ ┣ 📜index.css
+ ┣ 📜main.tsx
+ ┗ 📜vite-env.d.ts
+```
+
+## BACKEND API SERVICE FILETREE
+
+```
+📦config
+ ┣ 📜dbConnection.js            //db connection schema
+ ┣ 📜generateSecretKeys.js      
+ ┗ 📜validators.js              
+ 📦controllers
+ ┣ 📜Authentication.js          //login , signup and get user profile
+ ┣ 📜Bookmark.js                //create, remove and get all bookmarked movies/shows/tvseries
+ ┣ 📜Dashboard.js               //Get recommendations, allTrendingVideos, addFavouriteGenres, getAllGenres
+ ┣ 📜Movies.js                  //Get All movies, single movie, ADD NEW MOVIE
+ ┗ 📜Person.js                  //Get person(actor,producer) by id, name or by search
+📦middleware
+ ┣ 📜resFromat.js
+ ┗ 📜tokenVerify.js
+📦models
+ ┣ 📜actorModel.js
+ ┣ 📜BookmarkModel.js
+ ┣ 📜MovieModel.js     
+ ┣ 📜producerModel.js
+ ┣ 📜UserModel.js
+ ┗ 📜VideoModel.js
+📦router
+ ┣ 📜authRouter.js
+ ┣ 📜bookmarkRouter.js
+ ┣ 📜dashboardRouter.js
+ ┣ 📜movieRouter.js
+ ┗ 📜personRouter.js
+```
 
 
 ## Installation 🛠️
@@ -89,4 +184,3 @@ Please make sure to update tests as appropriate.
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
-

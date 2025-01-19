@@ -1,4 +1,3 @@
-//Component to show skeleton loading when vidoe detail is being fetched from the server
 import Skeleton from '@mui/material/Skeleton';
 import { useEffect, useState } from 'react';
 
