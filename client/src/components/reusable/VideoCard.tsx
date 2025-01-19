@@ -101,9 +101,6 @@ function VideoCard({ title, imageUrl, adult, id, videoType, releaseDate, bookmar
                 <PlayCircleIcon sx={{ fontSize: '30px' }} />
                 <p>Play</p>
             </div>
-            {/* <div className='flex flex-row justify-between'>
-                <div className='flex flex-col'> */}
-
             <div className={`flex gap-7 text-sm mt-2 ${isTrendingMovie ? 'absolute bottom-[30px] left-[10px]' : ' text-primary'}`}>
                 <p>{releaseDate?.split('-')[0]}</p>
                 <ul className='flex list-disc gap-6'>
@@ -116,8 +113,6 @@ function VideoCard({ title, imageUrl, adult, id, videoType, releaseDate, bookmar
                     title?.slice(0, 20)
                 }
             </h1>
-            {/* </div>
-            </div> */}
         </div>
     )
 }

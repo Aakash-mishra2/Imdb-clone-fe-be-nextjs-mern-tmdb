@@ -1,9 +1,8 @@
 // This Component serves the Registration form 
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 import { TextField } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 import axios from 'axios';
-import { AppContext } from '../../context/AppContext';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 // @ts-ignore
@@ -20,8 +19,6 @@ interface EventType {
 }
 
 function Register({ setisLogin }: RegisterProps) {
-
-    //const { setUser, setIsAuthenticated, setSnackbar } = useContext(AppContext)
     const navigate = useNavigate()
     const dispatch = useDispatch();
     //Defining the state for error handling 

@@ -9,9 +9,12 @@ import SkeletonLoader from '../components/reusable/SkeletonLoader';
 import PaginationComponent from '../components/reusable/Pagination';
 import NothingToShow from '../components/reusable/NothingToShow';
 import { VideoType } from '../types/types'
+import { setSnackbar } from '../store/reducerLogic';
+import { useSelector, useDispatch } from 'react-redux';
 
 function MoviePage() {
-  const { setSnackbar } = useContext(AppContext)
+
+  const dispatch = useDispatch();
 
   //State to store all the movies fetched from the server
   const [allMovies, setAllMovies] = useState<VideoType[]>([])
@@ -27,8 +30,6 @@ function MoviePage() {
 
   const [searchInput, setSearchInput] = useState<string>("");  //state for searching videos
 
-
-  //Fetching all the movies when page loads
   useEffect(() => {
     const fetchMovies = async () => {
       try {
@@ -40,10 +41,8 @@ function MoviePage() {
             setLoading(false)
           })
       } catch (error) {
-        setLoading(false)
-        setSnackbar((prev) => {
-          return { ...prev, open: true, message: "Error occurred" };
-        });
+        setLoading(false);
+        dispatch(setSnackbar({ open: true, message: "Error occurred" }));
       }
     }
     fetchMovies()

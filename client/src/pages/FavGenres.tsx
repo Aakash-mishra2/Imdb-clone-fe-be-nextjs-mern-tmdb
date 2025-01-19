@@ -1,12 +1,13 @@
 //Page to add and modify Favourite Genres
-import { Container } from '@mui/material'
-import { useContext, useEffect, useState } from 'react'
-import CheckIcon from '@mui/icons-material/Check';
 import axios from 'axios';
-import { LoadingButton } from '@mui/lab';
-import { AppContext } from '../context/AppContext';
+import { Container } from '@mui/material'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import Loader from '../components/customLoader/Loader';
+import { useDispatch } from 'react-redux';
+import { setSnackbar } from '../store/reducerLogic';
+import { LoadingButton } from '@mui/lab';
+import CheckIcon from '@mui/icons-material/Check';
 
 //Definf the type of genres object
 interface allGenresType {
@@ -15,22 +16,15 @@ interface allGenresType {
 }
 
 function FavGenres() {
-    const { setSnackbar } = useContext(AppContext)
     const navigate = useNavigate()
+    const dispatch = useDispatch();
 
     //State for genres
-    const [allGenres, setAllGenres] = useState<allGenresType[]>([])
+    const [allGenres, setAllGenres] = useState<allGenresType[]>([]);
+    const [loading, setLoading] = useState<boolean>(false);
+    const [buttonLoading, setButtonLoading] = useState<boolean>(false);
+    const [selectedGenres, setSelectedGenres] = useState<number[]>([]);
 
-    //State for showing loader when all genres is being fetched from the server
-    const [loading, setLoading] = useState<boolean>(false)
-
-    //State for showing loading icon when form is submitting
-    const [buttonLoading, setButtonLoading] = useState<boolean>(false)
-
-    //State to store all selected genres
-    const [selectedGenres, setSelectedGenres] = useState<number[]>([])
-
-    //Fetching all genres when page loads
     useEffect(() => {
         const fetchGenres = async () => {
             const token = localStorage.getItem('token')
@@ -50,10 +44,8 @@ function FavGenres() {
                         setLoading(false)
                     })
                     .catch(() => {
-                        setLoading(false)
-                        setSnackbar((prev) => {
-                            return { ...prev, open: true, message: "Some error occured" };
-                        });
+                        setLoading(false);
+                        dispatch(setSnackbar({ open: true, message: "Some error occured" }));
                     })
             } catch (error) {
                 console.log(error)
@@ -87,17 +79,13 @@ function FavGenres() {
             }
         )
             .then(() => {
-                setButtonLoading(false)
-                setSnackbar((prev) => {
-                    return { ...prev, open: true, message: "Favourite genres updated successfully" };
-                });
+                setButtonLoading(false);
+                dispatch(setSnackbar({ open: true, message: "Favourite genres updated successfully" }))
                 navigate('/home')
 
             }).catch(() => {
-                setButtonLoading(false)
-                setSnackbar((prev) => {
-                    return { ...prev, open: true, message: "Some error occured" };
-                });
+                setButtonLoading(false);
+                dispatch(setSnackbar({ open: true, message: "Some error occured" }));
             })
     }
 

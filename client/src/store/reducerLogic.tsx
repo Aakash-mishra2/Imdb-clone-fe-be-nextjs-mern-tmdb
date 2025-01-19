@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from 'axios';
-//import { userType, snackbarType, bookmarkVideoType } from '../types/types';
 
 // Async Thunks
 export const fetchProfile = createAsyncThunk(
@@ -82,9 +81,7 @@ const userSlice = createSlice({
             state.user = action.payload;
         },
         setSnackbar: (state, action) => {
-            console.log('snackbar', state.snackbar);
             state.snackbar = { ...state.snackbar, ...action.payload };
-            console.log('snackbar', state.snackbar);
         }
     },
     extraReducers: (builder) => {
