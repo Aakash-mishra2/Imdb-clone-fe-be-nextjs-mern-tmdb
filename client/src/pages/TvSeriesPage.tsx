@@ -1,33 +1,27 @@
 //This Page will show all the tv series fetched from the server
-
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import SearchIcon from '@mui/icons-material/Search';
 import VideoCard from '../components/reusable/VideoCard';
 import axios from 'axios';
-import { AppContext } from '../context/AppContext';
 import SkeletonLoader from '../components/reusable/SkeletonLoader';
 import PaginationComponent from '../components/reusable/Pagination';
 import NothingToShow from '../components/reusable/NothingToShow';
-import {VideoType} from '../types/types'
+import { VideoType } from '../types/types'
+//@ts-ignore
+import { setSnackbar } from "../store/reducerLogic.js";
+import { useDispatch } from 'react-redux';
 
 function TVSeriesPage() {
-  const { setSnackbar } = useContext(AppContext)
 
-  //State to store all the tv series fetched from the server
+  const dispatch = useDispatch();
   const [allTvSeries, setTvSeries] = useState<VideoType[]>([])
-
-  //State to show Skeleton loader when data is being fetched from the server
   const [loading, setLoading] = useState<boolean>(true)
-  
-  //===================States for searching and pagination 
   const [searchQuery, setSearchQuery] = useState<string>(""); //state for onChange of input box
   const [pageNo, setPageNo] = useState<number>(1);
   const [count, setCount] = useState<number>(1)
 
   const [searchInput, setSearchInput] = useState<string>("");  //state for searching videos
 
-
-  //Fetching all the Tv series when page loads
   useEffect(() => {
     const fetchTVSeries = async () => {
       try {
@@ -39,18 +33,16 @@ function TVSeriesPage() {
             setLoading(false)
           })
       } catch (error) {
-        setLoading(false)
-        setSnackbar((prev) => {
-          return { ...prev, open: true, message: "Error occurred" };
-        });
+        setLoading(false);
+        dispatch(setSnackbar({ open: true, message: "Error occurred" }));
       }
     }
     fetchTVSeries()
   }, [searchInput, pageNo])
 
   const handleSearch = async () => {
-    setPageNo(1)
-    setSearchInput(searchQuery)
+    setPageNo(1);
+    setSearchInput(searchQuery);
   }
 
   return (
@@ -75,7 +67,6 @@ function TVSeriesPage() {
           {!searchInput ? "Tv Series" : `Found ${(allTvSeries?.length || 1) * count} results for '${searchInput}'`}
         </h1>
         {!loading ?
-
           allTvSeries?.length > 0 ?
             <>
               <div className='grid bdsm:grid-cols-2 md:grid-cols-3 bdmd:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 mt-4'>
@@ -95,10 +86,10 @@ function TVSeriesPage() {
             </>
             :
             <NothingToShow />
-            :
-            <SkeletonLoader />
-          }
-          <PaginationComponent count={count} setPageNo={setPageNo} />
+          :
+          <SkeletonLoader />
+        }
+        <PaginationComponent count={count} setPageNo={setPageNo} />
       </section>
 
 

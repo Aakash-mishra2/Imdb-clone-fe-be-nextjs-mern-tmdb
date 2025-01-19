@@ -21,8 +21,6 @@ interface EventType {
 function Login({ setisLogin }: LoginProps) {
   const navigate = useNavigate()
   const dispatch = useDispatch();
-
-
   //Defining the state for error handling 
   const [error, setError] = useState({
     emailError: false,

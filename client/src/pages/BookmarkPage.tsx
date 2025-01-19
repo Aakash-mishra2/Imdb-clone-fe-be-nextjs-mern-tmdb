@@ -1,24 +1,28 @@
 //Page to show all bookmarks including tv series and movies
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import SearchIcon from '@mui/icons-material/Search';
 import VideoCard from '../components/reusable/VideoCard';
-import { AppContext } from '../context/AppContext';
 import SkeletonLoader from '../components/reusable/SkeletonLoader';
 import NothingToShow from '../components/reusable/NothingToShow';
+import { useSelector, useDispatch } from 'react-redux';
+import { bookmarkVideoType } from '../types/types.js';
+//@ts-ignore
+import { fetchBookmark, setLoading } from '../store/reducerLogic.js';
 
 function BookmarkPage() {
-  const {
-    fetchBookmark, movies, tvSeries,
-    loading, setLoading
-  } = useContext(AppContext)
-
+  const dispatch = useDispatch();
+  const movies: bookmarkVideoType[] = useSelector((state: any) => state.bookmark.movies);
+  const tvSeries: bookmarkVideoType[] = useSelector((state: any) => state.bookmark.tvSeries);
   const [searchQuery, setSearchQuery] = useState<string>(""); //state for onChange of input box
   const [searchInput, setSearchInput] = useState<string>("");  //state for searching videos
-
-  //Fethcing all bookmars when page loads
+  const loading = useSelector((state: any) => state.bookmark.loading);
   useEffect(() => {
-    setLoading(true)
-    fetchBookmark(searchInput)
+    dispatch(setLoading(true));
+    dispatch(fetchBookmark(searchInput));
+
+    return () => {
+      dispatch(setLoading(false));
+    }
   }, [searchInput])
 
   const handleSearch = async () => {

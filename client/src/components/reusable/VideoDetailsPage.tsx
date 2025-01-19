@@ -1,11 +1,11 @@
 import axios from 'axios';
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom';
-import { AppContext } from '../../context/AppContext';
 import { VideoDetailsType } from '../../types/types';
 import VideoDetailsLoader from './VideoDetailsLoader';
 import linkIcon from '../../assets/link.png'
 import ImdbIcon from '../../assets/imdb.png'
+//@ts-ignore
 import { setSnackbar } from '../../store/reducerLogic';
 import { useDispatch } from 'react-redux';
 
@@ -18,8 +18,6 @@ interface queryParamsType {
 }
 
 function VideoDetailsPage() {
-  //  const { setSnackbar } = useContext(AppContext)
-
   const { search } = useLocation();
   const dispatch = useDispatch();
 
@@ -47,12 +45,12 @@ function VideoDetailsPage() {
       if (queryParamsObject?.isNew) url += '/new'
       axios.get(url)
         .then((res) => {
-          setVideoInfo(res.data)
-          setLoading(false)
+          setVideoInfo(res.data);
+          setLoading(false);
         })
         .catch((_err) => {
           dispatch(setSnackbar({ open: true, message: "Error occurred" }))
-          setLoading(false)
+          setLoading(false);
         })
     }
   }, [])

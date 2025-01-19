@@ -1,33 +1,22 @@
-//This Page will show all the movies fetched from the server
-
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import SearchIcon from '@mui/icons-material/Search';
 import VideoCard from '../components/reusable/VideoCard';
 import axios from 'axios';
-import { AppContext } from '../context/AppContext';
 import SkeletonLoader from '../components/reusable/SkeletonLoader';
 import PaginationComponent from '../components/reusable/Pagination';
 import NothingToShow from '../components/reusable/NothingToShow';
 import { VideoType } from '../types/types'
 import { setSnackbar } from '../store/reducerLogic';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 function MoviePage() {
 
   const dispatch = useDispatch();
-
-  //State to store all the movies fetched from the server
   const [allMovies, setAllMovies] = useState<VideoType[]>([])
-
-  //State to show Skeleton loader when data is being fetched from the server
   const [loading, setLoading] = useState<boolean>(true)
-
-
-  //===================States for searching and pagination 
   const [searchQuery, setSearchQuery] = useState<string>(""); //state for onChange of input box
   const [pageNo, setPageNo] = useState<number>(1);
   const [count, setCount] = useState<number>(1)
-
   const [searchInput, setSearchInput] = useState<string>("");  //state for searching videos
 
   useEffect(() => {
@@ -36,9 +25,9 @@ function MoviePage() {
         setLoading(true)
         await axios.get(`/movie/get?search=${searchQuery}&pageNo=${pageNo}`)
           .then((response) => {
-            setAllMovies(response.data?.results)
-            setCount(response.data?.total_pages)
-            setLoading(false)
+            setAllMovies(response.data?.results);
+            setCount(response.data?.total_pages);
+            setLoading(false);
           })
       } catch (error) {
         setLoading(false);

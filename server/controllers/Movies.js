@@ -63,7 +63,6 @@ export const getSingleMovie = async (req, res) => {
 
 export const getMovieDetails = async (req, res) => {
     const { movieId } = req.params;
-
     try {
         const response = await Movie.findById(movieId)
             .populate('casts')

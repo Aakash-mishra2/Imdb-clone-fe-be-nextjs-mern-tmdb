@@ -6,7 +6,7 @@ import verifyToken from "../middleware/tokenVerify.js";
 
 router.get("/trendings", getAllTrendingVideos)
 router.get("/recommended", verifyToken, getRecommendedations)
-router.post("/add/genres", verifyToken, addFavouriteGenres)
+router.post("/add/genres", verifyToken, addFavouriteGenres);
 
 router.get('/get/genres', verifyToken, getAllGenres);
 

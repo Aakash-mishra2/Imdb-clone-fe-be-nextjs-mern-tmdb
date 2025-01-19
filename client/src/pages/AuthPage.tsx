@@ -1,18 +1,15 @@
 //Page for Authentication
 import { Container } from '@mui/material'
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import Register from '../components/auth/Register'
 import Login from '../components/auth/Login'
 import MovieCreationIcon from '@mui/icons-material/MovieCreation';
-import { AppContext } from '../context/AppContext';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 function AuthPage() {
-  //const { isAuthenticated } = useContext(AppContext)
   const isAuthenticated = useSelector((state: any) => state.account.isAuthenticated)
-  //State for checking whether user is on login form or registration form
-  const [isLogin, setisLogin] = useState<boolean>(true)
-  const navigate = useNavigate()
+  const [isLogin, setisLogin] = useState<boolean>(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (isAuthenticated) {

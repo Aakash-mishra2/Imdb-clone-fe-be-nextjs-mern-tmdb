@@ -1,12 +1,11 @@
 //This compopnent will show the content of movies and tv series in card form
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { useDispatch } from 'react-redux';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 import './reusable.css'
 import { useNavigate } from 'react-router-dom';
-import { AppContext } from '../../context/AppContext';
 import CircularProgress from '@mui/material/CircularProgress';
 
 //@ts-ignore
@@ -30,11 +29,9 @@ interface VideoCardProps {
 
 function VideoCard({ title, imageUrl, adult, id, videoType, releaseDate, bookmark = false, bookmarkId, isNewMovie = false, isTrendingMovie = false }: VideoCardProps) {
 
-    // const { createBookmark, removeBookmark, fetchBookmark, setSnackbar } = useContext(AppContext)
-    //state to check whether the current trending video has been bookmarked or not
     const dispatch = useDispatch();
     const [isBookmarked, setIsBookmarked] = useState(bookmark)
-    const [isBookmarking, setIsBookmarking] = useState<boolean>(false) // state to show laoder when adding or removing bookmark
+    const [isBookmarking, setIsBookmarking] = useState<boolean>(false)
 
     const handleCreateBookMark = async () => {
         setIsBookmarking(true)

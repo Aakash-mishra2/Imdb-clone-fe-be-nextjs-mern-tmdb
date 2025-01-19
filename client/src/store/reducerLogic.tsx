@@ -1,5 +1,32 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { userType, snackbarType, bookmarkVideoType } from '../types/types';
 import axios from 'axios';
+
+interface UserState {
+    isAppLoading: boolean;
+    isAuthenticated: boolean;
+    user?: userType;
+    snackbar: snackbarType;
+};
+
+interface BookmarkState {
+    movies: bookmarkVideoType[];
+    tvSeries: bookmarkVideoType[];
+    loading: boolean;
+};
+
+const initialUserState: UserState = {
+    isAppLoading: true,
+    isAuthenticated: false,
+    user: undefined,
+    snackbar: { open: false, vertical: "bottom", horizontal: "right", message: "" },
+};
+
+const initialBookmarkState: BookmarkState = {
+    movies: [],
+    tvSeries: [],
+    loading: true,
+}
 
 // Async Thunks
 export const fetchProfile = createAsyncThunk(
@@ -66,12 +93,7 @@ export const removeBookmark = createAsyncThunk(
 
 const userSlice = createSlice({
     name: 'user',
-    initialState: {
-        isAppLoading: true,
-        isAuthenticated: false,
-        user: undefined,
-        snackbar: { open: false, vertical: "bottom", horizontal: "right", message: "" },
-    },
+    initialState: initialUserState,
     reducers: {
         resetSnackbar(state) {
             state.snackbar = { open: false, vertical: "bottom", horizontal: "right", message: "" };
@@ -103,12 +125,12 @@ const userSlice = createSlice({
 
 const bookmarkSlice = createSlice({
     name: 'bookmark',
-    initialState: {
-        movies: [],
-        tvSeries: [],
-        loading: true,
+    initialState: initialBookmarkState,
+    reducers: {
+        setLoading: (state, action) => {
+            state.loading = action.payload;
+        }
     },
-    reducers: {},
     extraReducers: (builder) => {
         builder
             .addCase(fetchBookmark.pending, (state) => {
@@ -132,5 +154,7 @@ const bookmarkSlice = createSlice({
 });
 
 export const { resetSnackbar, login, setSnackbar } = userSlice.actions;
+export const { setLoading } = bookmarkSlice.actions;
+
 export const userReducer = userSlice.reducer;
 export const bookmarksReducer = bookmarkSlice.reducer;

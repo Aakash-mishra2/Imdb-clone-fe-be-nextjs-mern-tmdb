@@ -6,7 +6,9 @@ import Autocomplete from '@mui/material/Autocomplete';
 import { TextField, Container, Chip } from '@mui/material';
 import { debounce } from 'lodash';
 import { useNavigate } from 'react-router-dom';
-
+import { useDispatch } from 'react-redux';
+//@ts-ignore
+import { setSnackbar } from '../store/reducerLogic.js';
 //Definf the type of genres object
 
 interface actor {
@@ -20,13 +22,13 @@ interface EventType {
 
 function AddNewMovie() {
   const [loading, setLoading] = useState<boolean>(false);
-  //State to store all selected genres
   const [title, setTitle] = useState<string>("");
   const [summary, setSummary] = useState<string>("");
   const [results, setResults] = useState<actor[]>([]);
   const [selectedActors, setSelectedActors] = useState<any[]>([]);
   const [selectedProducer, setSelectedProducer] = useState<any>({ name: "", id: "" });
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [error, setError] = useState({
     titleError: false,
@@ -74,7 +76,6 @@ function AddNewMovie() {
   const handleChange = (e: EventType[`InputEvent`], field: string) => {
     const text = e.target.value;
     const newField = field + "Error";
-    // Removing error state if value in particular input is changes
     if (text) {
       setError((prev) => {
         return { ...prev, [newField]: false };
@@ -102,15 +103,11 @@ function AddNewMovie() {
     })
       .then(() => {
         setLoading(false);
-        setSnackbar((prev) => {
-          return { ...prev, open: true, message: "Added Movie Succesfully." };
-        });
+        dispatch(setSnackbar({ open: true, message: "Added Movie Succesfully." }));
         navigate("/home/movies");
       })
       .catch((_err) => {
-        setSnackbar((prev) => {
-          return { ...prev, open: true, message: "Added Movie Succesfully." };
-        });
+        dispatch(setSnackbar({ open: true, message: "Added Movie Succesfully." }))
       });
 
   }
