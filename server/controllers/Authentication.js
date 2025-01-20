@@ -23,9 +23,7 @@ export const register = async (req, res) => {
         .status(409)
         .json({ error: "User with this email already exists" });
     }
-
-
-    if (passwordValidation(password)) {
+    if (passwordValidation(password, 6)) {
       // hashing password
       const salt = await bcrypt.genSalt(10);
       const secPassword = await bcrypt.hash(password, salt);
@@ -44,7 +42,6 @@ export const register = async (req, res) => {
             res.status(500).json({ error: "Error in creating token" });
           }
           const created_at = user.createdAt;
-          //generating response format
           const response = genResponseFromat(
             id,
             email,

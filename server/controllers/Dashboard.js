@@ -7,7 +7,7 @@ export const getAllTrendingVideos = async (req, res) => {
     try {
         
         const response = await axios.get(
-            `https://api.themoviedb.org/3/trending/all/day?language=en-US&api_key=${apiKey}`
+            `https://api.themoviedb.org/3/trending/all/day?language=en-US&api_key=${apiKey}`,
         );
         return res.status(200).json(response.data);
     } catch (error) {
@@ -31,11 +31,8 @@ export const getRecommendedations = async(req, res)=>{
             );
             return res.status(200).json(response.data);
         }
-        else{
-
-            //getting user info embedded by middleware in request object after token verification.
+        else {
             const user = req.user
-            //finding all favourite generas for a user
             const userData = await UserModel.findById(user._id).select({genres: 1})
 
             const allFavGenres = userData.genres;
