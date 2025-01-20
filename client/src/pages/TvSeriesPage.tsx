@@ -15,6 +15,7 @@ const SkeletonLoader = React.lazy(() => import('../components/reusable/SkeletonL
 import { setSnackbar } from "../store/reducerLogic.js";
 function TVSeriesPage() {
   const dispatch = useDispatch();
+
   const [allTvSeries, setTvSeries] = useState<VideoType[]>([])
   const [loading, setLoading] = useState<boolean>(true)
   const [searchQuery, setSearchQuery] = useState<string>(""); //state for onChange of input box
@@ -33,7 +34,7 @@ function TVSeriesPage() {
       try {
         setLoading(true)
         const token = localStorage.getItem('token');
-        await axios.get(`/tv/get?search=${searchQuery}&pageNo=${pageNo}`,
+        await axios.get(`/tv/get?search=${searchInput}&pageNo=${pageNo}`,
           {
             headers: {
               Authorization: `Bearer ${token}`

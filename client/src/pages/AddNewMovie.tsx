@@ -50,8 +50,9 @@ function AddNewMovie() {
           }
         });
       setResults(response.data);
-    } catch (err) {
-      //setError('Failed to fetch data.');
+      navigate("/home/movies");
+    } catch (error) {
+      dispatch(setSnackbar({ open: true, message: "Could not add new movie. Try again!" }));
     }
   };
 
