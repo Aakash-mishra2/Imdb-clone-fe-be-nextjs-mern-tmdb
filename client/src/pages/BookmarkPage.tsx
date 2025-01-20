@@ -11,8 +11,10 @@ import { fetchBookmark, setLoading } from '../store/reducerLogic.js';
 
 function BookmarkPage() {
   const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
+
   const movies: bookmarkVideoType[] = useSelector((state: any) => state.bookmark.movies);
   const tvSeries: bookmarkVideoType[] = useSelector((state: any) => state.bookmark.tvSeries);
+
   const [searchQuery, setSearchQuery] = useState<string>(""); //state for onChange of input box
   const [searchInput, setSearchInput] = useState<string>("");  //state for searching videos
   const loading = useSelector((state: any) => state.bookmark.loading);

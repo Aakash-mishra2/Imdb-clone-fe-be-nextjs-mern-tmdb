@@ -31,8 +31,9 @@ function VideoDetailsPage() {
   //Getting the values (videoId and type) from the url and calling api to fetch 
   //details of a particular video
   useEffect(() => {
-    setLoading(true)
+    setLoading(true);
 
+    const token = localStorage.getItem('token');
     const queryParams = new URLSearchParams(search);
     const queryParamsObject: queryParamsType = {};
     for (const [key, value] of queryParams.entries()) {
@@ -43,7 +44,13 @@ function VideoDetailsPage() {
     if (queryParams && queryParamsObject?.type && queryParamsObject?.id) {
       let url = `${queryParamsObject?.type}/get/${queryParamsObject?.id}/info`;
       if (queryParamsObject?.isNew) url += '/new'
-      axios.get(url)
+      axios.get(url,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      )
         .then((res) => {
           setVideoInfo(res.data);
           setLoading(false);

@@ -1,10 +1,9 @@
 // This component will serve all the routes 
 import React from 'react';
-
 import { useRoutes } from 'react-router-dom';
 import Layout from '../layout/index' // This Component allows only logged in user to access protected routes
-import AuthGuard from '../components/auth/AuthGuard';
 
+const AuthGuard = React.lazy(() => import('../components/auth/AuthGuard'));
 const HomePage = React.lazy(() => import('../pages/HomePage'));
 const AuthPage = React.lazy(() => import('../pages/AuthPage'));
 const FavGenres = React.lazy(() => import('../pages/FavGenres'));

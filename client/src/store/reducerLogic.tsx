@@ -28,12 +28,20 @@ const initialBookmarkState: BookmarkState = {
     loading: true,
 }
 
+const token = localStorage.getItem('token');
+
 // Async Thunks
 export const fetchProfile = createAsyncThunk(
     'user/fetchProfile',
     async () => {
         try {
-            const response = await axios.get('/auth/me');
+            const response = await axios.get('/auth/me',
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            );
             return response.data?.content?.data;
         } catch (error) {
             console.log('FETCH USER PROFILE ERROR');
@@ -83,7 +91,13 @@ export const removeBookmark = createAsyncThunk(
     'bookmark/removeBookmark',
     async (bookmarkId: any) => {
         try {
-            await axios.delete(`/bookmark/delete?bookmarkId=${bookmarkId}`);
+            await axios.delete(`/bookmark/delete?bookmarkId=${bookmarkId}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            );
             return "Bookmark deleted successfully";
         } catch (error) {
             console.log('REMOVE BOOKMARK ERROR');

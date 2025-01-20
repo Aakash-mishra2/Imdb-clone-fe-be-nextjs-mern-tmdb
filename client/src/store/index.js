@@ -4,7 +4,7 @@ import { userReducer, bookmarksReducer } from './reducerLogic';
 export const store = configureStore({
     reducer: {
         account: userReducer,
-        bookmarks: bookmarksReducer
+        bookmark: bookmarksReducer
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware({
         serializableCheck: false,

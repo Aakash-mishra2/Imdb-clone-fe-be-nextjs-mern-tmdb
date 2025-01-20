@@ -24,8 +24,15 @@ function MoviePage() {
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        setLoading(true)
-        await axios.get(`/movie/get?search=${searchQuery}&pageNo=${pageNo}`)
+        setLoading(true);
+        const token = localStorage.getItem('token');
+        await axios.get(`/movie/get?search=${searchQuery}&pageNo=${pageNo}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        )
           .then((response) => {
             setAllMovies(response.data?.results);
             setCount(response.data?.total_pages);

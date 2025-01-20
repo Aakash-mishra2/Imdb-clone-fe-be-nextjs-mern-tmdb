@@ -1,12 +1,13 @@
 //This component is to show trending videos on the home page
 import axios from 'axios';
+import VideoCard from '../reusable/VideoCard';
+
 import { useEffect, useRef, useState } from 'react'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import '../reusable/reusable.css'
 import SkeletonLoader from '../reusable/SkeletonLoader';
 import { TrendingVideoType } from '../../types/types'
-import VideoCard from '../reusable/VideoCard';
 
 function TrendingBox() {
 
@@ -39,7 +40,14 @@ function TrendingBox() {
 
     //Fetching all the trending videos on component mount
     useEffect(() => {
-        axios.get(`/dashboard/trendings`)
+        const token = localStorage.getItem('token');
+        axios.get(`/dashboard/trendings`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        )
             .then((response) => {
                 setTrendings(response.data?.results)
                 setLoading(false)

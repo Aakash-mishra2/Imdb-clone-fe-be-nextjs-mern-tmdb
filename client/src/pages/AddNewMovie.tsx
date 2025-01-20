@@ -41,8 +41,14 @@ function AddNewMovie() {
     if (!query) return;
 
     setError({ titleError: false, summaryError: false });
+    const token = localStorage.getItem('token');
     try {
-      const response = await axios.get(`/person/get?search=${query}&pageNo=1`);
+      const response = await axios.get(`/person/get?search=${query}&pageNo=1`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
       setResults(response.data);
     } catch (err) {
       //setError('Failed to fetch data.');

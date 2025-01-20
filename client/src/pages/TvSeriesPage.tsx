@@ -1,20 +1,19 @@
 //This Page will show all the tv series fetched from the server
+import React from 'react';
 import axios from 'axios';
 import { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux';
 import { VideoType } from '../types/types'
 
 import SearchIcon from '@mui/icons-material/Search';
-import VideoCard from '../components/reusable/VideoCard';
-import SkeletonLoader from '../components/reusable/SkeletonLoader';
 import PaginationComponent from '../components/reusable/Pagination';
 import NothingToShow from '../components/reusable/NothingToShow';
-import { useDispatch } from 'react-redux';
+const VideoCard = React.lazy(() => import('../components/reusable/VideoCard'));
+const SkeletonLoader = React.lazy(() => import('../components/reusable/SkeletonLoader'));
 
 //@ts-ignore
 import { setSnackbar } from "../store/reducerLogic.js";
-
 function TVSeriesPage() {
-
   const dispatch = useDispatch();
   const [allTvSeries, setTvSeries] = useState<VideoType[]>([])
   const [loading, setLoading] = useState<boolean>(true)
@@ -33,7 +32,14 @@ function TVSeriesPage() {
     const fetchTVSeries = async () => {
       try {
         setLoading(true)
-        await axios.get(`/tv/get?search=${searchQuery}&pageNo=${pageNo}`)
+        const token = localStorage.getItem('token');
+        await axios.get(`/tv/get?search=${searchQuery}&pageNo=${pageNo}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        )
           .then((response) => {
             setTvSeries(response.data?.results)
             setCount(response.data?.total_pages)
