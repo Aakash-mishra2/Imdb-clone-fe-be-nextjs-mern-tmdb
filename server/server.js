@@ -12,6 +12,7 @@ import dashboardRouter from './router/dashboardRouter.js'
 import movieRouter from './router/movieRouter.js'
 import personRouter from './router/personRouter.js'
 import bookmarkRouter from './router/bookmarkRouter.js'
+import tvRouter from './router/tvRouter.js';
 
 
 // setting up express server
@@ -53,6 +54,7 @@ app.use('/api/auth', authRouter);
 app.use('/api/dashboard', dashboardRouter);
 app.use('/api/movie', movieRouter);
 app.use('/api/person', personRouter);
+app.use('/api/tv', tvRouter);
 app.use('/api/bookmark', bookmarkRouter);
 
 const port = process.env.PORT || 8000;
