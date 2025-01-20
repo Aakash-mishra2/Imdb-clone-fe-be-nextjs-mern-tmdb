@@ -1,11 +1,12 @@
 //This page is for showing all treading videos and Recommended videos
-import SearchIcon from '@mui/icons-material/Search';
-import TrendingBox from '../components/home/TrendingBox';
-import Recommended from '../components/home/Recommended';
+import React from 'react';
 import { useState } from 'react';
+import SearchIcon from '@mui/icons-material/Search';
+
+const TrendingBox = React.lazy(() => import('../components/home/TrendingBox'));
+const Recommended = React.lazy(() => import('../components/home/Recommended'));
 
 function HomePage() {
-
   //===================States for searching and pagination 
   const [searchQuery, setSearchQuery] = useState<string>(""); //state for onChange of input box
   const [searchInput, setSearchInput] = useState<string>("");  //state for searching videos

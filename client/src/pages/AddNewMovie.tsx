@@ -1,15 +1,16 @@
 import axios from 'axios';
-import { useState, useEffect, useCallback } from 'react'
-import { LoadingButton } from '@mui/lab';
-import Loader from '../components/customLoader/Loader';
+import React from 'react';
 import Autocomplete from '@mui/material/Autocomplete';
 import { TextField, Container, Chip } from '@mui/material';
+import { useState, useEffect, useCallback } from 'react'
+import { LoadingButton } from '@mui/lab';
 import { debounce } from 'lodash';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 //@ts-ignore
 import { setSnackbar } from '../store/reducerLogic.js';
-//Definf the type of genres object
+
+const Loader = React.lazy(() => import('../components/customLoader/Loader'));
 
 interface actor {
   name: string;

@@ -1,17 +1,18 @@
-
 // This component will serve all the routes 
-import { useRoutes } from 'react-router-dom';
-import Layout from '../layout/index'
+import React from 'react';
 
-import AuthGuard from '../components/auth/AuthGuard';  // This Component will ensure that only logged in user access the protected routes
-import HomePage from '../pages/HomePage'
-import AuthPage from '../pages/AuthPage'
-import FavGenres from '../pages/FavGenres';
-import MoviePage from '../pages/MoviePage';
-import TVSeriesPage from '../pages/TvSeriesPage';
-import VideoDetailsPage from '../components/reusable/VideoDetailsPage';
-import BookmarkPage from '../pages/BookmarkPage';
-import AddNewMovie from '../pages/AddNewMovie';
+import { useRoutes } from 'react-router-dom';
+import Layout from '../layout/index' // This Component allows only logged in user to access protected routes
+import AuthGuard from '../components/auth/AuthGuard';
+
+const HomePage = React.lazy(() => import('../pages/HomePage'));
+const AuthPage = React.lazy(() => import('../pages/AuthPage'));
+const FavGenres = React.lazy(() => import('../pages/FavGenres'));
+const MoviePage = React.lazy(() => import('../pages/MoviePage'));
+const TVSeriesPage = React.lazy(() => import('../pages/TvSeriesPage'));
+const VideoDetailsPage = React.lazy(() => import('../components/reusable/VideoDetailsPage'));
+const BookmarkPage = React.lazy(() => import('../pages/BookmarkPage'));
+const AddNewMovie = React.lazy(() => import('../pages/AddNewMovie'));
 
 export default function Routes() {
     return useRoutes([

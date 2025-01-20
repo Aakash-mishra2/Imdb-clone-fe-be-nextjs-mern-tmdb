@@ -3,10 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react'
 import { Container } from '@mui/material'
-
-import Register from '../components/auth/Register'
-import Login from '../components/auth/Login'
 import MovieCreationIcon from '@mui/icons-material/MovieCreation';
+import React from 'react';
+
+const Register = React.lazy(() => import('../components/auth/Register'));
+const Login = React.lazy(() => import('../components/auth/Login'));
 
 function AuthPage() {
 

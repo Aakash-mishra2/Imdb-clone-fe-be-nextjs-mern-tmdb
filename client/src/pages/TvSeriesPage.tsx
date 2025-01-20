@@ -1,15 +1,17 @@
 //This Page will show all the tv series fetched from the server
+import axios from 'axios';
 import { useEffect, useState } from 'react'
+import { VideoType } from '../types/types'
+
 import SearchIcon from '@mui/icons-material/Search';
 import VideoCard from '../components/reusable/VideoCard';
-import axios from 'axios';
 import SkeletonLoader from '../components/reusable/SkeletonLoader';
 import PaginationComponent from '../components/reusable/Pagination';
 import NothingToShow from '../components/reusable/NothingToShow';
-import { VideoType } from '../types/types'
+import { useDispatch } from 'react-redux';
+
 //@ts-ignore
 import { setSnackbar } from "../store/reducerLogic.js";
-import { useDispatch } from 'react-redux';
 
 function TVSeriesPage() {
 
@@ -21,6 +23,11 @@ function TVSeriesPage() {
   const [count, setCount] = useState<number>(1)
 
   const [searchInput, setSearchInput] = useState<string>("");  //state for searching videos
+
+  const handleSearch = async () => {
+    setPageNo(1);
+    setSearchInput(searchQuery);
+  }
 
   useEffect(() => {
     const fetchTVSeries = async () => {
@@ -40,10 +47,7 @@ function TVSeriesPage() {
     fetchTVSeries()
   }, [searchInput, pageNo])
 
-  const handleSearch = async () => {
-    setPageNo(1);
-    setSearchInput(searchQuery);
-  }
+
 
   return (
     <main className='flex flex-col xs:w-[100%] md:w-[95vw] gap-6'>

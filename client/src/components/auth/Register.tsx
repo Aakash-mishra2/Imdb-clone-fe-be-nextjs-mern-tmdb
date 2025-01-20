@@ -68,7 +68,7 @@ function Register({ setisLogin }: RegisterProps) {
             })
             .catch(({ response }) => {
                 setLoading(false);
-                dispatch(setSnackbar({ open: true, message: response?.data?.error }));
+                dispatch(setSnackbar({ open: true, message: `${response?.data?.error}. One Capital, small, numeric and special character each.` }));
             });
     };
 

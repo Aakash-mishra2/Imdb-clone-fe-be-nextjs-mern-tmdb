@@ -1,13 +1,15 @@
+import axios from 'axios';
 import { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux';
+import { setSnackbar } from '../store/reducerLogic';
+
 import SearchIcon from '@mui/icons-material/Search';
 import VideoCard from '../components/reusable/VideoCard';
-import axios from 'axios';
 import SkeletonLoader from '../components/reusable/SkeletonLoader';
 import PaginationComponent from '../components/reusable/Pagination';
 import NothingToShow from '../components/reusable/NothingToShow';
+
 import { VideoType } from '../types/types'
-import { setSnackbar } from '../store/reducerLogic';
-import { useDispatch } from 'react-redux';
 
 function MoviePage() {
 

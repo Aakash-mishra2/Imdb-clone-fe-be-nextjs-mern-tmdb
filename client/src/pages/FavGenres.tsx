@@ -3,13 +3,14 @@ import axios from 'axios';
 import { Container } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import Loader from '../components/customLoader/Loader';
 import { useDispatch } from 'react-redux';
 import { setSnackbar } from '../store/reducerLogic';
 import { LoadingButton } from '@mui/lab';
 import CheckIcon from '@mui/icons-material/Check';
 
 //Definf the type of genres object
+import Loader from '../components/customLoader/Loader';
+
 interface allGenresType {
     name: string;
     id: number;
