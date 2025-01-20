@@ -106,6 +106,7 @@ export const addNewMovie = async (req, res) => {
             await newProducer.save();
             producerId = newProducer._id;
         }
+
         const newMovie = {
             title: original_title,
             original_title,
@@ -138,7 +139,6 @@ export const addNewMovie = async (req, res) => {
 
         const movie = new Movie(newMovie);
         await movie.save();
-
 
         // Update the movies array for actors after movie creation
         for (const actorId of actorIds) {

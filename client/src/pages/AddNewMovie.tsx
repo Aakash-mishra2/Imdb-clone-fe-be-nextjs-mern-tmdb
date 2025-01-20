@@ -50,7 +50,6 @@ function AddNewMovie() {
           }
         });
       setResults(response.data);
-      navigate("/home/movies");
     } catch (error) {
       dispatch(setSnackbar({ open: true, message: "Could not add new movie. Try again!" }));
     }
@@ -86,7 +85,6 @@ function AddNewMovie() {
 
   const handleSubmit = async () => {
     const token = localStorage.getItem('token')
-
     const formObject = {
       title: title,
       original_title: title,
@@ -95,21 +93,18 @@ function AddNewMovie() {
       selectedProducer: selectedProducer,
     };
     setLoading(true);
-    const response: any = await axios.post('/movie/add', formObject, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-
-    })
-      .then(() => {
-        setLoading(false);
-        dispatch(setSnackbar({ open: true, message: response }));
-        navigate("/home/movies");
+    try {
+      const response: any = await axios.post('/movie/add', formObject, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
       })
-      .catch((_err) => {
-        dispatch(setSnackbar({ open: true, message: "Added Movie Succesfully." }))
-      });
-
+      dispatch(setSnackbar({ open: true, message: response.msg }));
+      navigate("/home/movies");
+    }
+    catch (error: any) {
+      dispatch(setSnackbar({ open: true, message: error.message }));
+    }
   }
 
   return (

@@ -63,7 +63,7 @@ function VideoCard({ title, imageUrl, adult, id, videoType, releaseDate, bookmar
     const navigate = useNavigate();
     let redirectionUrl = `/home/video/details?type=${videoType}&id=${id}`;
 
-    if (isNewMovie) redirectionUrl += 'isNew=true';
+    if (isNewMovie) redirectionUrl += '&isNew=true';
 
     return (
         <div className={`${isTrendingMovie ? 'w-[300px]' : 'h-[240px] w-[250px]'}  relative videCard-container}`}>
