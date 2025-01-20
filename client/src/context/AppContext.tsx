@@ -23,7 +23,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   const fetchProfile = async () => {
     axios
       .get("/auth/me")
-      .then((res) => {
+      .then(() => {
         setisAppLoading(false);
         navigate('/home')
       })

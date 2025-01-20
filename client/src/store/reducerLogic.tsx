@@ -43,7 +43,7 @@ export const fetchProfile = createAsyncThunk(
 
 export const fetchBookmark = createAsyncThunk(
     'bookmark/fetchBookmark',
-    async (search) => {
+    async (search: any) => {
         try {
             const token = localStorage.getItem('token');
             const response = await axios.get(`/bookmark/get?search=${search}`, {
@@ -60,7 +60,7 @@ export const fetchBookmark = createAsyncThunk(
 
 export const createBookmark = createAsyncThunk(
     'bookmark/createBookmark',
-    async (videoInfo, bookmark_type) => {
+    async (videoInfo: any, bookmark_type: any) => {
         try {
             const token = localStorage.getItem('token');
             await axios.post(
@@ -81,7 +81,7 @@ export const createBookmark = createAsyncThunk(
 
 export const removeBookmark = createAsyncThunk(
     'bookmark/removeBookmark',
-    async (bookmarkId) => {
+    async (bookmarkId: any) => {
         try {
             await axios.delete(`/bookmark/delete?bookmarkId=${bookmarkId}`);
             return "Bookmark deleted successfully";
@@ -144,10 +144,10 @@ const bookmarkSlice = createSlice({
             .addCase(fetchBookmark.rejected, (state) => {
                 state.loading = false;
             })
-            .addCase(createBookmark.fulfilled, (state, action) => {
+            .addCase(createBookmark.fulfilled, () => {
                 // Optionally handle optimistic updates here
             })
-            .addCase(removeBookmark.fulfilled, (state, action) => {
+            .addCase(removeBookmark.fulfilled, () => {
                 // Optionally handle optimistic updates here
             });
     },

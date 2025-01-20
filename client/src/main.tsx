@@ -4,6 +4,7 @@ import { HashRouter } from 'react-router-dom';
 import './index.css'
 import { AppProvider } from './context/AppContext.tsx';
 import { Provider } from 'react-redux';
+//@ts-ignore
 import { store } from './store/index.js';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(

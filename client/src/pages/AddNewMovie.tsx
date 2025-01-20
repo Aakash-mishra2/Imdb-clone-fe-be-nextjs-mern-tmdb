@@ -39,10 +39,7 @@ function AddNewMovie() {
   const fetchSearchResults = async (query: string) => {
     if (!query) return;
 
-    setError({
-      titleError: false,
-      summaryError: false,
-    });
+    setError({ titleError: false, summaryError: false });
     try {
       const response = await axios.get(`/person/get?search=${query}&pageNo=1`);
       setResults(response.data);
@@ -73,6 +70,7 @@ function AddNewMovie() {
       setError((prev) => {
         return { ...prev, [newField]: false };
       });
+      dispatch(setSnackbar({ open: true, message: error.titleError }))
     }
     if (field === "title") setTitle(text);
     else if (field === "summary") setSummary(text);
@@ -93,10 +91,11 @@ function AddNewMovie() {
       headers: {
         Authorization: `Bearer ${token}`
       }
+
     })
       .then(() => {
         setLoading(false);
-        dispatch(setSnackbar({ open: true, message: "Added Movie Succesfully." }));
+        dispatch(setSnackbar({ open: true, message: response }));
         navigate("/home/movies");
       })
       .catch((_err) => {

@@ -7,12 +7,12 @@ import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 import './reusable.css'
 import { useNavigate } from 'react-router-dom';
 import CircularProgress from '@mui/material/CircularProgress';
+import { ThunkDispatch } from '@reduxjs/toolkit';
 
 //@ts-ignore
 import { createBookmark, removeBookmark, fetchBookmark, setSnackbar } from '../../store/reducerLogic.js';
 
 //Defing the type of props that component can accept
-
 interface VideoCardProps {
     imageUrl: string;
     title?: string;
@@ -29,7 +29,7 @@ interface VideoCardProps {
 
 function VideoCard({ title, imageUrl, adult, id, videoType, releaseDate, bookmark = false, bookmarkId, isNewMovie = false, isTrendingMovie = false }: VideoCardProps) {
 
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
     const [isBookmarked, setIsBookmarked] = useState(bookmark)
     const [isBookmarking, setIsBookmarking] = useState<boolean>(false)
 
@@ -41,7 +41,7 @@ function VideoCard({ title, imageUrl, adult, id, videoType, releaseDate, bookmar
             poster_path: imageUrl,
             adult, id
         }
-        dispatch(createBookmark(videoInfo, videoType));
+        dispatch(createBookmark(videoInfo));
         setIsBookmarking(false)
         setIsBookmarked(true)
     }
@@ -57,7 +57,7 @@ function VideoCard({ title, imageUrl, adult, id, videoType, releaseDate, bookmar
         setIsBookmarking(false)
 
         setIsBookmarked(false)
-        dispatch(fetchBookmark());
+        dispatch(fetchBookmark(''));
     }
 
     const navigate = useNavigate();
