@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useState } from 'react'
 import { useDispatch } from 'react-redux';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
+import CreateTwoToneIcon from '@mui/icons-material/CreateTwoTone';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 import './reusable.css'
@@ -108,7 +109,7 @@ function VideoCard({ title, imageUrl, adult, id, videoType, releaseDate, bookmar
             </div>
             <div className={`absolute top-3 right-14 bg-gray-600 bg-opacity-50  h-10 w-10 flex items-center justify-center rounded-full hover:bg-white cursor-pointer hover:text-black `}
             >
-                <BookmarkBorderIcon className="text-blue-500" onClick={handleEditMovie} />
+                <CreateTwoToneIcon className="text-white-500" onClick={handleEditMovie} />
             </div>
 
             <div

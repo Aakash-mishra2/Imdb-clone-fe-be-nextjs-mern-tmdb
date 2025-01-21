@@ -5,7 +5,7 @@ const BookmarkSchema = new mongoose.Schema({
     bookmark_type: { type: String, require: true },
     videoId: { type: mongoose.Schema.Types.ObjectId, ref: "Video" },
 
-}, { timestamps: true, })
+}, { timestamps: true, });
 
 const BookmarkModel = mongoose.model('Bookmark', BookmarkSchema);
 
