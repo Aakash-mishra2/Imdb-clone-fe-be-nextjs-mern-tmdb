@@ -1,4 +1,3 @@
-// This component will serve all the routes 
 import React from 'react';
 import { useRoutes } from 'react-router-dom';
 import Layout from '../layout/index' // This Component allows only logged in user to access protected routes
@@ -12,6 +11,7 @@ const TVSeriesPage = React.lazy(() => import('../pages/TvSeriesPage'));
 const VideoDetailsPage = React.lazy(() => import('../components/reusable/VideoDetailsPage'));
 const BookmarkPage = React.lazy(() => import('../pages/BookmarkPage'));
 const AddNewMovie = React.lazy(() => import('../pages/AddNewMovie'));
+const EditMovie = React.lazy(() => import('../pages/EditMovie'));
 
 export default function Routes() {
     return useRoutes([
@@ -31,6 +31,13 @@ export default function Routes() {
                     element:
                         <AuthGuard>
                             <AddNewMovie />
+                        </AuthGuard>
+                },
+                {
+                    path: 'edit-movie',
+                    element:
+                        <AuthGuard>
+                            <EditMovie />
                         </AuthGuard>
                 }
             ]

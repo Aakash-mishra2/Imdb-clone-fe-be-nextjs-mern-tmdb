@@ -5,7 +5,6 @@ const apiKey = process.env.TMDB_API_KEY
 //getting all trending videos(movies/tv_series)
 export const getAllTrendingVideos = async (req, res) => {
     try {
-        
         const response = await axios.get(
             `https://api.themoviedb.org/3/trending/all/day?language=en-US&api_key=${apiKey}`,
         );

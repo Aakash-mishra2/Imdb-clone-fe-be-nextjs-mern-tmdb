@@ -7,6 +7,7 @@ import { LoadingButton } from '@mui/lab';
 import { debounce } from 'lodash';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+
 //@ts-ignore
 import { setSnackbar } from '../store/reducerLogic.js';
 
@@ -21,12 +22,15 @@ interface EventType {
   InputEvent: React.ChangeEvent<HTMLInputElement>;
 }
 
-function AddNewMovie() {
+function EditMovie() {
+  const movieObject: any = localStorage.getItem('MOVIE_OBJECT');
+  const parsedMovieObj: any = JSON.parse(movieObject);
+
   const [loading, setLoading] = useState<boolean>(false);
-  const [title, setTitle] = useState<string>("");
-  const [summary, setSummary] = useState<string>("");
+  const [title, setTitle] = useState<string>(parsedMovieObj.title);
+  const [summary, setSummary] = useState<string>(parsedMovieObj.overview);
   const [results, setResults] = useState<actor[]>([]);
-  const [selectedActors, setSelectedActors] = useState<any[]>([]);
+  const [movieActors, setMovieActors] = useState<any[]>(parsedMovieObj.casts);
   const [selectedProducer, setSelectedProducer] = useState<any>({ name: "", id: "" });
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -35,7 +39,6 @@ function AddNewMovie() {
     titleError: false,
     summaryError: false,
   });
-
 
   const fetchSearchResults = async (query: string) => {
     if (!query) return;
@@ -67,7 +70,7 @@ function AddNewMovie() {
 
   useEffect(() => {
     return () => { debouncedSearch.cancel(); }
-  }, [selectedProducer])
+  }, [selectedProducer]);
 
   // Single function to handles input change of both input
   const handleChange = (e: EventType[`InputEvent`], field: string) => {
@@ -84,15 +87,25 @@ function AddNewMovie() {
   }
 
   const handleSubmit = async () => {
-    const token = localStorage.getItem('token')
+    const token = localStorage.getItem('token');
+
+    const reducedData = movieActors.map(actor => ({
+      id: actor.id,
+      imdbId: actor.id,
+      name: actor.name,
+      profile_path: actor.profile_path,
+    }));
+
     const formObject = {
       title: title,
       original_title: title,
       summary: summary,
-      selectedActors: selectedActors,
+      selectedActors: reducedData,
       selectedProducer: selectedProducer,
+      poster_path: parsedMovieObj.poster_path,
     };
     setLoading(true);
+
     try {
       const response: any = await axios.post('/movie/add', formObject, {
         headers: {
@@ -108,11 +121,10 @@ function AddNewMovie() {
   }
 
   return (
-
     <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: '100vh', pt: 5, pb: 5 }}>
       <main className="mt-6  p-4 bg-secondary rounded-xl xs:w-[100%] sm:w-[60%]">
         <h1 className='text-2xl text-center'>
-          New Movie
+          Edit Movie
           <br />
         </h1>
         {!loading ?
@@ -139,97 +151,103 @@ function AddNewMovie() {
               variant="filled"
               type='text'
               sx={{
-                marginTop: '30px',
+                marginTop: '12px',
                 width: '100%',
                 '& .css-e2jmdx': {
                   borderBottom: `'1px solid #FC4747 !important'}`
                 },
-                fontSize: '14px'
+                '& MuiFormLabel-root': {
+                  fontSize: '14px',
+                }
               }}
               value={summary}
               onChange={(e: EventType[`InputEvent`]) => handleChange(e, "summary")}
             />
-
-            <Autocomplete
-              multiple
-              id="tags-outlined"
-              options={results}
-              getOptionLabel={(option) => option.name}
-              value={selectedActors}
-              onChange={(event: any, newValue: any[]) => {
-                event.preventDefault();
-                setSelectedActors(newValue)
-              }}
-              disableCloseOnSelect
-              filterSelectedOptions
-              onInputChange={(_, newInputValue: string) => handleSearchChange({ target: { value: newInputValue } })}
-              sx={{
-                '& MuiFormLabel-root': {
-                  color: 'white',
-                },
-                '& .css-e2jmdx': {
-                  color: 'white'
-                },
-                '& .MuiFormControl-root': {
-                  backgroundColor: '#161D2F',
-                  marginTop: '4px'
-                },
-                fontSize: '14px',
-                '& .MuiFormLabel-root ': {
-                  marginBottom: '8px'
-                }
-              }}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Add Actors"
-                  variant="filled"
-                  sx={{
-                    '& .MuiInputLabel-root': {
-                      color: 'white', // White color for label
-                    },
-                    '& .MuiOutlinedInput-root': {
-                      backgroundColor: '#222b42', // Dark background for input field
-                      '& fieldset': {
-                        borderColor: '#666', // Border color for input field
-                      },
-                      '&:hover fieldset': {
-                        borderColor: '#888', // Border color on hover
-                      },
-                    },
-                    '& .MuiInputBase-input': {
-                      color: 'white', // White color for input text
-                      marginTop: '4px'
-                    },
-                    '& .MuiInputBase-root': {
-                      backgroundColor: '#161D2F'
-                    }
-                  }}
-                />
-              )}
-              renderTags={(value, getTagProps) =>
-                value.map((option: any, index: number) => (
-                  <Chip
-                    label={option.name}
-                    {...getTagProps({ index })}
+            <div className='h-40 w-full overflow-y-scroll'>
+              <Autocomplete
+                multiple
+                id="tags-outlined"
+                options={results}
+                getOptionLabel={(option) => option.name}
+                value={movieActors}
+                onChange={(event: any, newValue: any[]) => {
+                  event.preventDefault();
+                  setMovieActors(newValue);
+                }}
+                disableCloseOnSelect
+                filterSelectedOptions
+                onInputChange={(_, newInputValue: string) => handleSearchChange({ target: { value: newInputValue } })}
+                sx={{
+                  '& MuiFormLabel-root': {
+                    color: 'white',
+                    fontSize: '16px',
+                    paddingTop: '8px'
+                  },
+                  '& .css-e2jmdx': {
+                    color: 'white'
+                  },
+                  '& .MuiFormControl-root': {
+                    backgroundColor: '#161D2F',
+                    marginTop: '4px'
+                  },
+                  fontSize: '14px',
+                  '& .MuiFormLabel-root ': {
+                    marginBottom: '8px'
+                  }
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Edit Actors"
+                    variant="filled"
                     sx={{
-                      '& .MuiChip-label': {
+                      '& .MuiInputLabel-root': {
                         color: 'white', // White color for label
+                        fontSize: '18px',
                       },
-                      '& .MuiSvgIcon-root': {
-                        color: 'white',
+                      '& .MuiOutlinedInput-root': {
+                        backgroundColor: '#222b42', // Dark background for input field
+                        '& fieldset': {
+                          borderColor: '#666', // Border color for input field
+                        },
+                        '&:hover fieldset': {
+                          borderColor: '#888', // Border color on hover
+                        },
                       },
                       '& .MuiInputBase-input': {
                         color: 'white', // White color for input text
+                        marginTop: '4px'
                       },
-                      '& .MuiButtonBase-root': {
-                        color: 'white'
+                      '& .MuiInputBase-root': {
+                        backgroundColor: '#161D2F'
                       }
                     }}
                   />
-                ))
-              }
-            />
+                )}
+                renderTags={(value, getTagProps) =>
+                  value.map((option: any, index: number) => (
+                    <Chip
+                      label={option.name}
+                      {...getTagProps({ index })}
+                      sx={{
+                        '& .MuiChip-label': {
+                          color: 'white', // White color for label
+                        },
+                        '& .MuiSvgIcon-root': {
+                          color: 'white',
+                        },
+                        '& .MuiInputBase-input': {
+                          color: 'white', // White color for input text
+                        },
+                        '& .MuiButtonBase-root': {
+                          color: 'white'
+                        }
+                      }}
+                    />
+                  ))
+                }
+              />
+            </div>
             <Autocomplete
               freeSolo
               options={results}
@@ -238,8 +256,7 @@ function AddNewMovie() {
               onChange={(event: any, newValue: any) => {
                 event.preventDefault();
                 setSelectedProducer(newValue);
-              }
-              }
+              }}
               disableCloseOnSelect
               filterSelectedOptions
               onInputChange={(_, newInputValue: string) => handleSearchChange({ target: { value: newInputValue } })}
@@ -290,4 +307,4 @@ function AddNewMovie() {
   )
 }
 
-export default AddNewMovie
+export default EditMovie

@@ -1,4 +1,5 @@
 //This compopnent will show the content of movies and tv series in card form
+import axios from 'axios';
 import { useState } from 'react'
 import { useDispatch } from 'react-redux';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
@@ -8,7 +9,6 @@ import './reusable.css'
 import { useNavigate } from 'react-router-dom';
 import CircularProgress from '@mui/material/CircularProgress';
 import { ThunkDispatch } from '@reduxjs/toolkit';
-
 //@ts-ignore
 import { createBookmark, removeBookmark, fetchBookmark, setSnackbar } from '../../store/reducerLogic.js';
 
@@ -44,7 +44,24 @@ function VideoCard({ title, imageUrl, adult, id, videoType, releaseDate, bookmar
         dispatch(createBookmark(videoInfo));
         setIsBookmarking(false)
         setIsBookmarked(true)
-    }
+    };
+
+    const handleEditMovie = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            const response = await axios.get(`/movie/get/${id}/info`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            );
+            localStorage.setItem('MOVIE_OBJECT', JSON.stringify(response.data));
+            navigate("/edit-movie");
+            // dispatch(setSnackbar({ open: true, message: response.data.message }));
+        }
+        catch (error) { dispatch(setSnackbar({ open: true, message: "Could not find movie data. Try again." })); }
+    };
 
     const handleRemoveBookmark = async () => {
         if (!bookmarkId) {
@@ -88,6 +105,10 @@ function VideoCard({ title, imageUrl, adult, id, videoType, releaseDate, bookmar
                     :
                     <CircularProgress sx={{ height: '25px', width: '25px', color: '#FFFFFF', marginTop: '2px' }} />
                 }
+            </div>
+            <div className={`absolute top-3 right-14 bg-gray-600 bg-opacity-50  h-10 w-10 flex items-center justify-center rounded-full hover:bg-white cursor-pointer hover:text-black `}
+            >
+                <BookmarkBorderIcon className="text-blue-500" onClick={handleEditMovie} />
             </div>
 
             <div

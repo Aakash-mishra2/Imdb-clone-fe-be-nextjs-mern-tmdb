@@ -6,7 +6,8 @@ import Routes from './routes'
 import CustomSnackbar from './components/reusable/CustomSnackbar'
 import Loader from './components/customLoader/Loader';
 
-axios.defaults.baseURL = "https://movie-listing-api-service.onrender.com/api";
+// axios.defaults.baseURL = "https://movie-listing-api-service.onrender.com/api";
+axios.defaults.baseURL = "http://localhost:8000/api";
 axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
 
 function App() {

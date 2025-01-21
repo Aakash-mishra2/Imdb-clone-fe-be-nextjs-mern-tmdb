@@ -52,8 +52,8 @@ export const getSingleMovie = async (req, res) => {
         const { casts, ...resWithoutCredits } = newResponse;
 
         let finalResponse = { ...resWithoutCredits, casts: releventCasts };
-
         return res.status(200).json(finalResponse);
+
     } catch (error) {
         res
             .status(500)
@@ -71,8 +71,7 @@ export const getMovieDetails = async (req, res) => {
         res.status(200).json(response);
     }
     catch (error) {
-        res
-            .status(500)
+        res.status(500)
             .json({ status: true, error: error, message: "Internal server error" });
     }
 }
@@ -84,7 +83,6 @@ export const addNewMovie = async (req, res) => {
 
     let actorIds = [];
     let producerId = "";
-
     try {
         //Process actors
         for (const actor of selectedActors) {
@@ -110,7 +108,7 @@ export const addNewMovie = async (req, res) => {
         const newMovie = {
             title: original_title,
             original_title,
-            poster_path: process.env.DEFAULT_MOVIE_POSTER,
+            poster_path: req.body.poster_path ? req.body.poster_path : process.env.DEFAULT_MOVIE_POSTER,
             casts: actorIds,
             producer: producerId,
             overview: summary,
@@ -139,8 +137,6 @@ export const addNewMovie = async (req, res) => {
 
         const movie = new Movie(newMovie);
         await movie.save();
-
-        // Update the movies array for actors after movie creation
         for (const actorId of actorIds) {
             await Actor.findByIdAndUpdate(
                 actorId,
@@ -150,7 +146,6 @@ export const addNewMovie = async (req, res) => {
             producerId,
             { $addToSet: { movies: movie._id } }
         );
-
         res.status(200).json({ msg: "New movie added" });
     }
     catch (error) {

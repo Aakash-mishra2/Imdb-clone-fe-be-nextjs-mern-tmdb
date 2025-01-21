@@ -8,11 +8,10 @@ import mongoose from "mongoose";
 
 const producerSchema = new mongoose.Schema({
     id: { type: Number, required: true },
-    imdbId: { type: Number, required: true },
     name: { type: String, required: true },
     imdbId: { type: String, required: true },
     profile_path: { type: String, required: false },
-    movies: [{ type: mongoose.Types.ObjectId, ref: 'Movie', required: false }]
+    movies: [{ type: mongoose.Types.ObjectId, ref: 'Movie', required: false }],
 });
 
 const Producer = mongoose.model('Producer', producerSchema);
