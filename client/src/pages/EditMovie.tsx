@@ -112,7 +112,7 @@ function EditMovie() {
           Authorization: `Bearer ${token}`
         }
       })
-      dispatch(setSnackbar({ open: true, message: response.msg }));
+      dispatch(setSnackbar({ open: true, message: response.data.msg }));
       navigate("/home/movies");
     }
     catch (error: any) {
@@ -181,7 +181,8 @@ function EditMovie() {
                   '& MuiFormLabel-root': {
                     color: 'white',
                     fontSize: '16px',
-                    paddingTop: '8px'
+                    paddingTop: '8px',
+                    marginBottom: '14px',
                   },
                   '& .css-e2jmdx': {
                     color: 'white'
@@ -190,10 +191,14 @@ function EditMovie() {
                     backgroundColor: '#161D2F',
                     marginTop: '4px'
                   },
-                  fontSize: '14px',
+                  '& .MuiFilledInput-root': {
+                    marginTop: '12px',
+                    paddingTop: '16px'
+                  },
                   '& .MuiFormLabel-root ': {
                     marginBottom: '8px'
-                  }
+                  },
+
                 }}
                 renderInput={(params) => (
                   <TextField
@@ -201,6 +206,11 @@ function EditMovie() {
                     label="Edit Actors"
                     variant="filled"
                     sx={{
+                      marginTop: '12px',
+                      '& .MuiFilledInput-root': {
+                        marginTop: '12px',
+                        paddingTop: '12px',
+                      },
                       '& .MuiInputLabel-root': {
                         color: 'white', // White color for label
                         fontSize: '18px',
@@ -295,7 +305,7 @@ function EditMovie() {
               onClick={handleSubmit}
               loading={loading}
             >
-              {!loading && "Add New Movie"}
+              {!loading && "Save and Continue"}
             </LoadingButton>
           </form>
           :

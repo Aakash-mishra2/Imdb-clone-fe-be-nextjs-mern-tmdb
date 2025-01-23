@@ -99,7 +99,7 @@ function AddNewMovie() {
           Authorization: `Bearer ${token}`
         }
       })
-      dispatch(setSnackbar({ open: true, message: response.msg }));
+      dispatch(setSnackbar({ open: true, message: response.data.msg }));
       navigate("/home/movies");
     }
     catch (error: any) {

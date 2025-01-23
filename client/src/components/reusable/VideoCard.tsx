@@ -50,7 +50,10 @@ function VideoCard({ title, imageUrl, adult, id, videoType, releaseDate, bookmar
     const handleEditMovie = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get(`/movie/get/${id}/info`,
+            let fetchUrl = `/movie/get/${id}/info`;
+            if (isNewMovie) fetchUrl += '/new';
+
+            const response = await axios.get(fetchUrl,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`
@@ -59,9 +62,10 @@ function VideoCard({ title, imageUrl, adult, id, videoType, releaseDate, bookmar
             );
             localStorage.setItem('MOVIE_OBJECT', JSON.stringify(response.data));
             navigate("/edit-movie");
-            // dispatch(setSnackbar({ open: true, message: response.data.message }));
         }
-        catch (error) { dispatch(setSnackbar({ open: true, message: "Could not find movie data. Try again." })); }
+        catch (error) {
+            dispatch(setSnackbar({ open: true, message: "Could not find movie data. Try again." }));
+        }
     };
 
     const handleRemoveBookmark = async () => {
