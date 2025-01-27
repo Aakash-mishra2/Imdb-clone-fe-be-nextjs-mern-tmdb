@@ -77,13 +77,35 @@ function AddNewMovie() {
       setError((prev) => {
         return { ...prev, [newField]: false };
       });
-      dispatch(setSnackbar({ open: true, message: error.titleError }))
     }
     if (field === "title") setTitle(text);
     else if (field === "summary") setSummary(text);
   }
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (event: any) => {
+
+    event.preventDefault();
+    if (!title && !summary) {
+      setError((prev) => {
+        return { ...prev, titleError: true, summaryError: true }
+      });
+      return;
+    }
+
+    if (!title) {
+      setError((prev) => {
+        return { ...prev, titleError: true }
+      });
+      return;
+    }
+
+    if (!summary) {
+      setError((prev) => {
+        return { ...prev, summaryError: true }
+      });
+      return;
+    }
+
     const token = localStorage.getItem('token')
     const formObject = {
       title: title,
@@ -100,9 +122,11 @@ function AddNewMovie() {
         }
       })
       dispatch(setSnackbar({ open: true, message: response.data.msg }));
+      setLoading(false);
       navigate("/home/movies");
     }
     catch (error: any) {
+      setLoading(false);
       dispatch(setSnackbar({ open: true, message: error.message }));
     }
   }
@@ -133,6 +157,9 @@ function AddNewMovie() {
               value={title}
               onChange={(e: EventType[`InputEvent`]) => handleChange(e, "title")}
             />
+            {error.titleError && (
+              <p className="text-secondary text-[12px] absolute right-0 top-[60px]">Can't be empty</p>
+            )}
             <TextField
               id="filled-search"
               label="Summary"
@@ -149,6 +176,9 @@ function AddNewMovie() {
               value={summary}
               onChange={(e: EventType[`InputEvent`]) => handleChange(e, "summary")}
             />
+            {error.summaryError && (
+              <p className="text-secondary text-[12px] absolute right-0 top-[60px]">Can't be empty</p>
+            )}
 
             <Autocomplete
               multiple
