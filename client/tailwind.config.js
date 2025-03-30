@@ -9,7 +9,8 @@ export default {
       backgroundColor: {
         'primary':'#5A698F',
         'secondary': '#161D2F',
-        'tertiary': '#FC4747'
+        'tertiary': '#FC4747',
+        'defaultBkg': '#10141f'
       },
       colors:{
         primary: '#5A698F',
@@ -37,6 +38,5 @@ export default {
       // => @media (min-width: 1440px) { ... }
     },
   },
-  plugins: [],
+  plugins: [require('tailwind-scrollbar')],
 }
-

@@ -1,4 +1,3 @@
-import MovieCreationIcon from '@mui/icons-material/MovieCreation';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import TheatersIcon from '@mui/icons-material/Theaters';
 import LiveTvIcon from '@mui/icons-material/LiveTv';
@@ -7,7 +6,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { useSelector } from 'react-redux';
-
+import movieIcon from "../assets/iconLogo.png";
 import { Link, useLocation } from 'react-router-dom';
 import { Avatar, Tooltip } from '@mui/material';
 
@@ -24,17 +23,14 @@ function sidebar() {
 
     return (
         <header
-            className='xs:h-[15vh] sm:h-[10vh] md:h-[90vh] xs:w-[100%] md:w-[5vw] bg-secondary 
-            md:rounded-2xl sm:flex md:flex-col items-center py-4 justify-between md:fixed 
-            md:overflow-y-scroll xs:px-5 md:px-0 xs:mb-4 md:mb-0'
+            className='xs:h-[22vh] sm:h-[10vh] md:h-[90vh] xs:w-[100%] px-4 md:w-[5vw] bg-defaultBkg 
+            md:rounded-2xl sm:flex md:flex-col items-center py-4 md:py-0 justify-between md:fixed  xs:px-5 md:px-0 xs:mb-4 md:mb-4 md:overflow-y-scroll overflow-y-none scrollbar-thin sm:scrollbar-none items-center'
         >
-            <div className='xs:flex w-[100%] items-center justify-center sm:block md:flex'>
-                <MovieCreationIcon
-                    sx={{ fontSize: '30px', color: '#FC4747' }}
-                />
+            <div className='xs:flex justify-center '>
+                <img src={movieIcon} className='h-16 w-20 md:w-24 md:mb-4' />
             </div>
 
-            <div className='flex md:flex-col items-center justify-center gap-5'>
+            <div className='grid grid-cols-4 grid-rows-2 gap-2 pl-4 sm:pl-0 mt-1 sm:flex md:flex-col items-center justify-center sm:gap-6'>
 
                 <Link to='/home'>
                     <Tooltip title="Dashboard" placement='right-start' >

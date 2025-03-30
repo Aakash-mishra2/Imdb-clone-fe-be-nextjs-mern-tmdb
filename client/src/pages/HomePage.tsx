@@ -20,7 +20,7 @@ function HomePage() {
 
   return (
     <main className='flex flex-col xs:w-[100%] sm:w-[100%] md:w-[88vw] gap-6'>
-      <header className='bg-secondary h-[50px] rounded-xl flex gap-2 items-center px-3'>
+      <header className='bg-secondary h-[50px] rounded-xl flex gap-2 items-center px-3 mt-8 sm:mt-0'>
         <SearchIcon sx={{color:'white'}}/>
         <input
           type='text'

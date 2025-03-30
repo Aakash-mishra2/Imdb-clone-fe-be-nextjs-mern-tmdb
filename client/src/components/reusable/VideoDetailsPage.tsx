@@ -63,7 +63,7 @@ function VideoDetailsPage() {
   }, [])
 
   return (
-    <main className='xs:block bdmd:flex w-full gap-20'>
+    <main className='xs:block bdmd:flex w-full gap-20 mt-12 md:mt-0'>
       {loading ? (
         <VideoDetailsLoader />
       ) : (
@@ -71,13 +71,16 @@ function VideoDetailsPage() {
           <img
             src={`https://image.tmdb.org/t/p/w500/${videoInfo?.poster_path}`}
             alt='image'
-            className='xs:h-[50vh] bdmd:h-[80vh] rounded-md'
+              className='xs:h-[50vh] bdmd:h-[80vh] rounded-md w-[75%] md:w-fit'
           />
           <section className=' flex flex-col gap-4 w-full h-full bdmd:justify-between px-3 xs:mt-5 bdmd:mt-0'>
-            <h1 className='text-3xl font-semibold'>
-              {videoInfo?.original_title || videoInfo?.name}
-            </h1>
-            <h1 className='text-2xl'>3.9</h1>
+              <div className='flex sm:flex-col gap-4'>
+
+                <h1 className='text-3xl font-semibold'>
+                  {videoInfo?.original_title || videoInfo?.name}
+                </h1>
+                <h1 className='text-2xl'>3.9</h1>
+              </div>
 
             {params?.type === 'movie' ?
               <div className='flex justify-between'>

@@ -58,7 +58,7 @@ function Recommended({ searchInput, searchQuery, pageNo, setPageNo }: propType) 
                 <>
                     {allVideos?.length > 0 ?
                         <>
-                            <div className='grid bdsm:grid-cols-2 md:grid-cols-3 bdmd:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 mt-4'>
+                            <div className='grid justify-center bdsm:grid-cols-2 md:grid-cols-3 bdmd:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 mt-4'>
                                 {allVideos && allVideos.map((video) => {
                                     return (
                                         <VideoCard
